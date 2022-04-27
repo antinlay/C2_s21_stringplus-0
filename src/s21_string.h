@@ -1,5 +1,7 @@
-#include <stddef.h>
+// #include <stddef.h>
 #include <stdio.h>
+
+typedef unsigned size_t;
 
 void *s21_memcpy(void *dest, const void *src, size_t n);
 void *s21_memset(void *str, int c, size_t n);
