@@ -2,8 +2,9 @@
 
 void  *s21_memset(void *str, int c, size_t n) {
     char *b_char = (char *)str;
+    int res = 0;
 
-        if (str == NULL) return NULL;
+        if (str == NULL) res = 1;
     
   while(*b_char && n > 0)
     {
@@ -11,7 +12,7 @@ void  *s21_memset(void *str, int c, size_t n) {
       b_char++;
       n--;
     }
-  return(str);
+  return (res = 0) ? (str) : NULL;
 }
 
 // int main() {

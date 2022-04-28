@@ -1,4 +1,4 @@
-// #include <string.h>
+#include <string.h>
 #include <errno.h>
 #include "s21_string.h"
 
@@ -24,9 +24,9 @@ char *s21_strerror(int errnum) {
 	extern const char *const sys_errlist[];
 	register char *p, *t;
 	char tmp[40];
+	int res = 0;
 
-	if (errnum < sys_nerr)
-		return((char*)sys_errlist[errnum]);
+	if (errnum < sys_nerr) res = 1;
 
 	/* Do this by hand, so we don't include stdio(3). */
 	t = tmp;
@@ -38,5 +38,5 @@ char *s21_strerror(int errnum) {
 		if (t <= tmp)
 			break;
 	}
-	return(ebuf);
+	return(res = 0) ? (ebuf) : ((char*)sys_errlist[errnum]);
 }

@@ -1,42 +1,33 @@
+
 CC=gcc
 CFLAGS=-c -std=c11 -Wall -Werror -Wextra
+OS := $(shell uname -s)
 
-all: build
+ifeq ($(OS), Darwin)
+	CHECK_H=-lcheck
+else
+	CHECK_H=-lcheck -lsubunit -lm -lrt -lpthread -D_GNU_SOURCE
+endif
 
-build: s21_strlen.o s21_strcpy.o s21_memset.o s21_memcpy.o
-	$(CC) s21_strlen.o s21_strcpy.o s21_memset.o s21_memcpy.o -o ..materials/build/build
+all: 
 
-build-static: data_stat.a main.o
-	$(CC) data_stat.a main.o -o ../../build/Quest_5
+build: *.o
+	$(CC) *.o -o ../materials/build/
 
-build-dynamic: data_io.o data_stat.o data_process.so decision.o main.o
-	$(CC) -L../../build data_io.o data_stat.o data_process.so decision.o main.o -o ../../build/Quest_6
+test: s21_test.o
+	
 
-data_io.o: ../data_libs/data_io.c
-	$(CC) $(CFLAGS) -c ../data_libs/data_io.c -o data_io.o
+s21_string.o: *.c
+	$(CC) $(CFLAGS) -c s21_strncpy.c s21_strlen.c s21_strcspn.c s21_strcpy.c s21_memset.c s21_memcpy.c
 
-data_stat.o: ../data_libs/data_stat.c
-	$(CC) $(CFLAGS) -c ../data_libs/data_stat.c -o data_stat.o
+s21_string.a: *.o
+	ar rcs s21_string.a *.o
+	ranlib s21_string.a
 
-data_process.o: ../data_module/data_process.c
-	$(CC) $(CFLAGS) -c ../data_module/data_process.c -o data_process.o
-
-data_process.so: ../data_module/data_process.c
-	$(CC) -fPIC -c ../data_module/data_process.c -o data_process.so
-
-decision.o: ../yet_another_decision_module/decision.c
-	$(CC) $(CFLAGS) -c ../yet_another_decision_module/decision.c -o decision.o
-
-main.o: main_executable_module.c
-	$(CC) $(CFLAGS) -c main_executable_module.c -o main.o
-
-data_stat.a: data_stat.o data_io.o data_process.o decision.o
-	ar rc data_stat.a data_stat.o data_io.o data_process.o decision.o
-	ranlib data_stat.a
-
+gcov_report: 
 
 clean:
-	rm -rf *.o ../../build/* ../data_libs/*.o ../data_module/*.o ../yet_another_decision_module/*.o
+	rm -rf *.o ../materials/build/*
 	rm -rf *.a
 	rm -rf *.o
 	rm -rf *.so
