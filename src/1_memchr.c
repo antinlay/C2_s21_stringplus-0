@@ -4,13 +4,15 @@
 //#include <sys/cdefs.h>
 //__FBSDID("$FreeBSD: src/lib/libc/string/memchr.c,v 1.4 2002/03/21 18:44:54 obrien Exp $");
 
+//memchr – поиск первого вхождения указанного символа в массиве
+
 #include <string.h>
 #include <stdio.h>
 
 void *s21_memchr(s, c, n)
     const void *s;
     unsigned char c;
-    size_t n;
+    s21_size_t n;
 {
     if (n != 0) {
         const unsigned char *p = s;
@@ -22,7 +24,7 @@ void *s21_memchr(s, c, n)
             n--;
         } while (n != 0);
     }
-    return (NULL);
+    return (s21_NULL);
 }
 //проверка
 int main () {
@@ -35,9 +37,9 @@ int main () {
     
     sym = s21_memchr (str, '3', 4);
     sym1 = memchr (str1, '3', 4);
-    if (sym != NULL)
+    if (sym != s21_NULL)
           sym[0]='!';
-    if (sym1 != NULL)
+    if (sym1 != s21_NULL)
           sym1[0]='!';
     printf("%s\n", sym);
     printf("%s\n", sym1);

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-char * s21_strncat(char *  dst, const char *  src, size_t n)
+char * s21_strncat(char *  dst, const char *  src, s21_size_t n)
 {
     if (n != 0) {
         char *d = dst;

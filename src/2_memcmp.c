@@ -11,7 +11,7 @@
 int
 s21_memcmp(s1, s2, n)
     const void *s1, *s2;
-    size_t n;
+    s21_size_t n;
 {
     if (n != 0) {
         const unsigned char *p1 = s1, *p2 = s2;
