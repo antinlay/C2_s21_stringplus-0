@@ -6,7 +6,7 @@ SOURCES=s21_string.c
 OBJECTS=$(SOURCES:.c=.o)
 GCOVFLAGS=--coverage
 HTML_CREATE=lcov -t a.out -o rep.info -c -d .; genhtml -o report rep.info
-OS := $(shell uname -s)
+OS := $(shell uname)
 
 ifeq ($(OS), Darwin)
 	CHECK_H=-lcheck

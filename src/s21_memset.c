@@ -1,4 +1,5 @@
 #include "s21_string.h"
+// #include <string.h>
 
 void  *s21_memset(void *str, int c, s21_size_t n) {
     char *b_char = (char *)str;
@@ -12,14 +13,16 @@ void  *s21_memset(void *str, int c, s21_size_t n) {
       b_char++;
       n--;
     }
-  return (res = 0) ? (str) : NULL;
+  return (res = 1) ? NULL : (str);
 }
 
 // int main() {
     
-//     char str[] = "hello everybody";
+//     char str[] = "FUCKlo everybody";
     
-//         s21_memset(str, 'a', 5);
+//         memset(str, '1', 5);
+//         printf("%s\n", str);
+//         s21_memset(str, '2', 3);
 //         printf("%s\n", str);
     
 //     return 0;

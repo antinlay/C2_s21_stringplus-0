@@ -1,9 +1,11 @@
-#ifndef S21_STRING_H
-#define S21_STRING_H
+#ifndef S21_STRING_H_
+#define S21_STRING_H_
 #include <stddef.h>
-// #include <stdio.h>
+#include <stdio.h>
 #define s21_NULL ((void*)0)
+// #ifndef S21_SIZE_T_
 typedef unsigned s21_size_t;
+
 
 void *s21_memcpy(void *dest, const void *src, s21_size_t n);
 void *s21_memset(void *str, int c, s21_size_t n);
