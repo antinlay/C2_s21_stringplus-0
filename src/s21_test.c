@@ -7,7 +7,7 @@
 
 START_TEST(s21_strlen_test) {
     char str1[] = "QWERTY\0";
-    char str2[] = "QWERTY";
+    char str2[] = "QWERTY1";
     ck_assert_int_eq(s21_strlen(str1), strlen(str2));
     ck_assert_int_eq(s21_strlen(str1), strlen(str1));
 } END_TEST

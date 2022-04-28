@@ -21,7 +21,10 @@ static char ebuf[40] = UPREFIX;
 
 char *s21_strerror(int errnum) {
     extern const int sys_nerr;
-	extern const char *const sys_errlist[];
+	extern const char *const sys_errlist[
+
+		
+	];
 	register char *p, *t;
 	char tmp[40];
 	int res = 0;
