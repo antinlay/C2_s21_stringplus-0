@@ -1,11 +1,12 @@
 
 CC=gcc
-CFLAGS=-c -std=c11 -Wall -Werror -Wextra
+CFLAGS=-std=c11 -Wall -Werror -Wextra
 LDFLAGS=-L. -ls21_string
-SOURCES=s21_string.c 
+SOURCES=s21_memchr.c s21_memcmp.c s21_memmove.c s21_strncat.c s21_strcmp.c s21_strncmp.c s21_strpbrk.c
 OBJECTS=$(SOURCES:.c=.o)
+LIBRARY=s21_test.c s21_string.a
 GCOVFLAGS=--coverage
-HTML_CREATE=lcov -t a.out -o rep.info -c -d .; genhtml -o report rep.info
+HTML_CREATE=lcov -t "test" -o rep.info -c -d .; genhtml -o report rep.info
 OS := $(shell uname)
 
 ifeq ($(OS), Darwin)
@@ -14,25 +15,27 @@ else
 	CHECK_H=-lcheck -lsubunit -lm -lrt -lpthread -D_GNU_SOURCE
 endif
 
-all: clean s21_string.o s21_string.a test
+all: s21_string.a test gcov_report
 
-build: *.o
-	$(CC) *.o -o ../materials/build/
-
-test: s21_test.c
-	$(CC) s21_test.c s21_string.a -o a.out $(CHECK_H)
-
-
-s21_string.o: *.c
-	$(CC) $(CFLAGS) -c s21_memchr.c s21_memcmp.c
-
-s21_string.a: *.o
-	ar rcs s21_string.a *.o
+s21_string.a: 
+	$(CC) $(CFLAGS) -c $(SOURCES)
+	ar rcs s21_string.a $(OBJECTS)
 	ranlib s21_string.a
 
+test: s21_test.c
+	$(CC) $(CFLAGS) $(LIBRARY) -o test $(CHECK_H)
+	./test
+
+gcov_report:
+	$(CC) $(GCOVFLAGS) $(LIBRARY) -o test $(CHECK_H)
+	./test
+	$(HTML_CREATE)
+	open ./report/index.html
+
 clean:
-	rm -rf *.o ../materials/build/*
+	rm -rf *.o test
 	rm -rf *.a
 	rm -rf *.o
 	rm -rf *.so
-rebuild: clean all
+	rm -rf *.gcda *.gcno test rep.info
+	rm -rf report

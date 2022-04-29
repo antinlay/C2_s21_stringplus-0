@@ -1,9 +1,3 @@
-//#if defined(LIBC_SCCS) && !defined(lint)
-//static char sccsid[] = "@(#)memchr.c;
-//#endif /* LIBC_SCCS and not lint */
-//#include <sys/cdefs.h>
-//__FBSDID("$FreeBSD: src/lib/libc/string/memchr.c,v 1.4 2002/03/21 18:44:54 obrien Exp $");
-
 //memchr – поиск первого вхождения указанного символа в массиве
 
 #include "s21_string.h"
@@ -50,6 +44,6 @@ void *s21_memchr(const void *str, int c, s21_size_t n)
 //         sym[0] = '!';
 //     if (sym1 != s21_NULL)
 //         sym1[0] = '!';
-//     printf("%s\n", sym);
-//     printf("%s\n", sym1);
+//     printf("%p %s\n", sym, sym);
+//     printf("%p %s\n", sym1, sym1);
 // }

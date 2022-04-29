@@ -6,6 +6,7 @@
 
 #include "s21_string.h"
 #include <stdio.h>
+#include <stddef.h>
 
 
 

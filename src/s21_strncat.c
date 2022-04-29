@@ -1,68 +1,57 @@
 #include <stdio.h>
-#include <string.h>
+// #include <string.h>
+#include "s21_string.h"
 
-char * s21_strncat(char *  dst, const char *  src, s21_size_t n)
+char *s21_strncat(char *dst, const char *src, s21_size_t n)
 {
-    if (n != 0) {
+    if (n != 0)
+    {
         char *d = dst;
         const char *s = src;
-
         while (*d != 0)
             d++;
-        do {
+        do
+        {
             if ((*d = *s) == 0)
                 break;
             s++;
             d++;
-        } while (--n != 0); {
-         
+        } while (--n != 0);
+        {
             *d = 0;
-            
         }
     }
     return (dst);
 }
 
-// int main ()
+// int main()
 // {
-//    // Массивы для добавления строк
-//    char source1[15]="000";
-//    char source2[15]="000";
-//    // Строка добавления
-//    char app[15]="12345";
+//     char source1[4] = "000";
+//     char source2[15] = "000";
+//     char app[15] = "12345";
 
-//    // Печать добавляемой строки
-//    printf ("stingh app:  %s\n",app);
+//     printf("stingh app:  %s\n", app);
 
-//    // Добавление строки app в строку src1, но не более трех символов
-//    strncat (source1, app,3);
-//    // Вывод результата
-//    printf ("stingh source1: %s\n",source1);
+//     strncat(source1, app, 3);
+//     printf("stingh source1: %s\n", source1);
 
-//    // Добавление строки app в строку src2, но не более семи символов
-//    strncat (source2, app,7);
-//    // Вывод результата
-//    printf ("stingh source2: %s\n",source2);
-    
-//     // Массивы для добавления строк
-//     char source11[15]="000";
-//     char source22[15]="000";
-//     // Строка добавления
-//     char app1[15]="12345";
+//     strncat(source2, app, 7);
+//     printf("stingh source2: %s\n", source2);
 
-//     // Печать добавляемой строки
-//     printf ("s21_strncat app:  %s\n",app1);
+//     char source11[15] = "000";
+//     char source22[15] = "000";
 
-//     // Добавление строки app в строку src1, но не более трех символов
-//     s21_strncat (source11, app1,3);
-//     // Вывод результата
-//     printf ("s21_strncat source1: %s\n",source11);
+//     char app1[15] = "12345";
 
-//     // Добавление строки app в строку src2, но не более семи символов
-//     s21_strncat (source22, app1,7);
-//     // Вывод результата
-//     printf ("s21_strncat source2: %s\n",source22);
+//     printf("s21_strncat app:  %s\n", app1);
 
+//     s21_strncat(source11, app1, 3);
 
-//    return 0;
+//     printf("s21_strncat source1: %s\n", source11);
+
+//     s21_strncat(source22, app1, 7);
+
+//     printf("s21_strncat source2: %s\n", source22);
+
+//     return 0;
 // }
