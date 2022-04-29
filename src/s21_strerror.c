@@ -1,10 +1,9 @@
 #include "s21_string.h"
-#define	UPREFIX	"Unknown error: "
-
+#define UPREFIX "Unknown error: "
 #if defined(__linux__)
 #define S21_ERRLIST                                                        \
 {                                                                          \
-    "Success", "Operation not permitted", "No such file or directory", \
+    "Success", "Operation not permitted", "No such file or directory",     \
     "No such process", "Interrupted system call", "Input/output error",    \
     "No such device or address", "Argument list too long",                 \
     "Exec format error", "Bad file descriptor", "No child processes",      \
@@ -71,7 +70,7 @@
 #define S21_ERRLIST                                                        \
 {                                                                          \
     "Undefined error: 0", "Operation not permitted",                       \
-    "No such file or directory", "No such process",                  \
+    "No such file or directory", "No such process",                        \
     "Interrupted system call", "Input/output error",                       \
     "Device not configured", "Argument list too long",                     \
     "Exec format error", "Bad file descriptor", "No child processes",      \
@@ -128,6 +127,7 @@ char *s21_strerror(int errnum) {
     int n = sizeof(resnum)/sizeof(resnum[0]);
     char *res[40];
     if (errnum < 0 || errnum > n) res[40] = ebuf;
-    else res[40] = resnum[errnum];
+    else
+        res[40] = resnum[errnum];
     return res[40];
 }

@@ -66,7 +66,6 @@ START_TEST(s21_strcpy_test) {
   out1 = s21_strcpy(dest2, src2);
   out2 = strcpy(dest2, src2);
   ck_assert_str_eq(out1, out2);
-
 } END_TEST
 
 START_TEST(s21_memset_test) {
@@ -81,7 +80,7 @@ START_TEST(s21_memset_test) {
   out2 = memset(str1, c, n);
   ck_assert_str_eq(out1, out2);
 
-  n = 5; 
+  n = 5;
   out1 = s21_memset(str2, c, n);
   out2 = memset(str2, c, n);
   ck_assert_str_eq(out1, out2);
@@ -128,10 +127,8 @@ START_TEST(s21_strerror_test) {
   char *out1 = s21_strerror(n);
   char *out2 = strerror(n);
   ck_assert_str_eq(out1, out2);
-  
   n = 96;
   ck_assert_str_eq(out1, out2);
-
   n = -96;
   ck_assert_str_eq(out1, out2);
 }
@@ -152,7 +149,6 @@ int main(void) {
     tcase_add_test(case_test, s21_strncpy_test);
     tcase_add_test(case_test, s21_strrchr_test);
     tcase_add_test(case_test, s21_strerror_test);
-    
     srunner_run_all(sr, CK_NORMAL);
     num_failed = srunner_ntests_failed(sr);
     srunner_free(sr);
