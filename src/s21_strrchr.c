@@ -1,5 +1,3 @@
-// #include <string.h>
-// #include <stdio.h>
 #include "string.h"
 
 char *s21_strrchr(const char *str, int c) {

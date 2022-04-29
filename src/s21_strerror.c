@@ -124,25 +124,10 @@
 static char ebuf[40] = UPREFIX;
 
 char *s21_strerror(int errnum) {
-	char *resnum[] = S21_ERRLIST;
-	// const int sys_nerr = sizeof(resnum) / sizeof(resnum[0]);
-	register char *p, *t;
-	char tmp[40];
-	int res = 1;
-	printf("%d", errnum);
-	if (errnum < 107) {
-		res = 0;
-	} else {
-		/* Do this by hand, so we don't include stdio(3). */
-		t = tmp;
-		do {
-			*t++ = "0123456789"[errnum % 10];
-		} while (errnum /= 10);
-		for (p = ebuf + sizeof(UPREFIX) - 1;;) {
-			*p++ = *--t;
-			if (t <= tmp)
-				break;
-		}
-	}
-	return (res = 0) ? ((char*)resnum[errnum]) : (ebuf);
+    char *resnum[] = S21_ERRLIST;
+    int n = sizeof(resnum)/sizeof(resnum[0]);
+    char *res[40];
+    if (errnum < 0 || errnum > n) res[40] = ebuf;
+    else res[40] = resnum[errnum];
+    return res[40];
 }

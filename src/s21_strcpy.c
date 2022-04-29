@@ -1,12 +1,4 @@
-// #include <string.h>
 #include "s21_string.h"
-
-// int main(void) {
-//     char src[] = "ghjldfhkjgdkgjhfd\0";
-//     char dest[] = "hjldf\0";
-//     puts(s21_strcpy(dest, src));
-//     puts(strcpy(dest, src));
-// }
 
 char *s21_strcpy(char *dest, const char *src) {
     const s21_size_t n = s21_strlen(src);  // Вычисляет длину строки str, не включая завершающий нулевой символ
