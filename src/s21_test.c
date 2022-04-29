@@ -93,7 +93,6 @@ START_TEST(s21_memset_test) {
 } END_TEST
 
 START_TEST(s21_memcpy_test) {
-  // s21_size_t n = 5;
   char src1[15] = "gdsfa";
   char dst1[3] = "654";
   char src2[11];
