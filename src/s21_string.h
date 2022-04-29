@@ -1,12 +1,16 @@
-#ifndef _S21_STRING_H_
-#define _S21_STRING_H_
+#include <errno.h>
 #include <stddef.h>
 #include <stdarg.h>
-// #include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#ifndef _S21_STRING_H_
+#define _S21_STRING_H_
+
 #define s21_NULL ((void*)0)
 // #ifndef S21_SIZE_T_
 typedef unsigned s21_size_t;
-#define S21_FUNC { "s21_memcpy_test", "s21_strlen_test" }
+// #define S21_FUNC { "s21_memcpy_test", "s21_strlen_test" }
 
 // char s21_func[] = {  };
 //  "s21_memset", "s21_strcpy", "s21_strerror", "s21_strcspn",

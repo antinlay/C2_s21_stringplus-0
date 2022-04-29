@@ -1,9 +1,7 @@
 #include <check.h>
 #include <string.h>
-// #include <stdio.h>
 
 #include "s21_string.h"
-// #include "s21_errno.h"
 
 START_TEST(s21_memcpy_test) {
     // s21_size_t n = 5;
@@ -37,6 +35,22 @@ START_TEST(s21_strlen_test) {
     ck_assert_int_eq(out1, out2);
 } END_TEST
 
+START_TEST(s21_strerror_test) {
+//   char *src, *src1, *src2;
+//   src = ;
+  ck_assert_str_eq(s21_strerror(2), strerror(2));
+//   free(src);
+
+//   src1 = ;
+  ck_assert_str_eq(s21_strerror(70), strerror(70));
+//   free(src1);
+
+//   src2 = ;
+  ck_assert_str_eq(s21_strerror(-1500), strerror(-1500));
+//   free(src2);
+}
+END_TEST
+
 int main(void) {
     Suite *s21 = suite_create("s21_string");
     TCase *case_test = tcase_create("test");
@@ -47,6 +61,7 @@ int main(void) {
     // for(int i = sizeof(S21_FUNC[])/sizeof(S21_FUNC[0]); i > 0; i--) {
         tcase_add_test(case_test, s21_memcpy_test);
         tcase_add_test(case_test, s21_strlen_test);
+        tcase_add_test(case_test, s21_strerror_test);
     // }
     
     srunner_run_all(sr, CK_NORMAL);
