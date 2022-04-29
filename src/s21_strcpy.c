@@ -2,8 +2,8 @@
 #include "s21_string.h"
 
 // int main(void) {
-//     char dest[] = "ghjldfhkjgdkgjhfd\0";
-//     char src[] = "hjldf\0";
+//     char src[] = "ghjldfhkjgdkgjhfd\0";
+//     char dest[] = "hjldf\0";
 //     puts(s21_strcpy(dest, src));
 //     puts(strcpy(dest, src));
 // }
