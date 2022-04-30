@@ -21,5 +21,8 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n);
 int s21_strcmp(const char *str1, const char *str2);
 int s21_strncmp(const char *str1, const char *str2, s21_size_t n);
 char *s21_strpbrk(const char *str1, const char *str2);
+void *s21_memset(void *str, int c, s21_size_t n);
+char *s21_strcat(char *dest, const char *src);
+char *s21_strchr(const char *str, int c);
 
 #endif
