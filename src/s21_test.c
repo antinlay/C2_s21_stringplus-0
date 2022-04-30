@@ -1,8 +1,15 @@
 #include <check.h>
 #include <string.h>
+#include <stdio.h>
 // #include <stdlib.h>
 
 #include "s21_string.h"
+
+START_TEST(s21_sprintf_test) {
+    char c[20];
+    int s = -412;
+    ck_assert_int_eq(s21_sprintf(c, "%d", s), sprintf(c, "%d", s));
+} END_TEST
 
 START_TEST(s21_strrchr_test) {
   char *out1, *out2;
@@ -149,9 +156,24 @@ int main(void) {
     tcase_add_test(case_test, s21_strncpy_test);
     tcase_add_test(case_test, s21_strrchr_test);
     tcase_add_test(case_test, s21_strerror_test);
+    tcase_add_test(case_test, s21_sprintf_test);
     srunner_run_all(sr, CK_NORMAL);
     num_failed = srunner_ntests_failed(sr);
     srunner_free(sr);
+    char c[20];
+    s21_sprintf(c, "%e", 0.0005);
+    printf("\n%s\n", c);
+    s21_sprintf(c, "%E", 0.0005);
+    printf("\n%s\n", c);
+    
+    s21_sprintf(c, "%g", 0.00005);
+    printf("\n%s\n", c);
+    s21_sprintf(c, "%g", 0.00055);
+    printf("\n%s\n", c);
+    s21_sprintf(c, "%G", 0.00005);
+    printf("\n%s\n", c);
+    s21_sprintf(c, "%G", 0.00055);
+    printf("\n%s\n", c);
     return (num_failed != 0) ? 1 : 0;
 }
 

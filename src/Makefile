@@ -2,7 +2,7 @@
 CC=gcc
 CFLAGS=-std=c11 -Wall -Werror -Wextra
 LDFLAGS=-L. -ls21_string
-SOURCES=s21_strcpy.c s21_memset.c s21_strlen.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c
+SOURCES=s21_sprintf.c s21_strcpy.c s21_memset.c s21_strlen.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c
 OBJECTS=$(SOURCES:.c=.o)
 LIBRARY=s21_test.c s21_string.a
 GCOVFLAGS=--coverage -fprofile-arcs -ftest-coverage
@@ -15,18 +15,18 @@ else
 	CHECK_H=-lcheck -lsubunit -lm -lrt -lpthread -D_GNU_SOURCE
 endif
 
-all: s21_string.a test gcov_report
+all: clean s21_string.a test gcov_report
 
-s21_string.a:
+s21_string.a: clean
 	$(CC) $(CFLAGS) -c $(SOURCES)
 	ar rcs s21_string.a $(OBJECTS)
 	ranlib s21_string.a
 
-test:
+test: clean s21_string.a
 	$(CC) $(CFLAGS) $(LIBRARY) -o test $(CHECK_H)
 	./test
 
-gcov_report:
+gcov_report: clean s21_string.a
 	$(CC) $(CFLAGS) $(GCOVFLAGS) $(LIBRARY) $(SOURCES) -o test $(CHECK_H)
 	./test
 	$(HTML_CREATE)
@@ -37,4 +37,4 @@ clean:
 	rm -rf *.a
 	rm -rf *.o
 	rm -rf *.so
-	rm -rf *.gcda *.gcno test rep.info
+	rm -rf *.gcda *.gcno *.gch test rep.info
