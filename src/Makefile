@@ -5,7 +5,7 @@ LDFLAGS=-L. -ls21_string
 SOURCES=s21_strcpy.c s21_memset.c s21_strlen.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c
 OBJECTS=$(SOURCES:.c=.o)
 LIBRARY=s21_test.c s21_string.a
-GCOVFLAGS=--coverage
+GCOVFLAGS=--coverage -fprofile-arcs -ftest-coverage
 HTML_CREATE=lcov -t "test" -o rep.info -c -d .; genhtml -o report rep.info
 OS := $(shell uname)
 
@@ -27,7 +27,7 @@ test:
 	./test
 
 gcov_report:
-	$(CC) $(CFLAGS) $(GCOVFLAGS) $(LIBRARY) -o test $(CHECK_H)
+	$(CC) $(CFLAGS) $(GCOVFLAGS) $(LIBRARY) $(SOURCES) -o test $(CHECK_H)
 	./test
 	$(HTML_CREATE)
 	open ./report/index.html
