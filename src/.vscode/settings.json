@@ -4,6 +4,7 @@
         "random": "c",
         "string.h": "c",
         "stddef.h": "c",
-        "s21_string.h": "c"
+        "s21_string.h": "c",
+        "algorithm": "c"
     }
 }
