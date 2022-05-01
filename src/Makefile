@@ -2,7 +2,7 @@
 CC=gcc
 CFLAGS=-std=c11 -Wall -Werror -Wextra
 LDFLAGS=-L. -ls21_string
-SOURCES=s21_memchr.c s21_memcmp.c s21_memmove.c s21_strncat.c s21_strcmp.c s21_strncmp.c s21_strpbrk.c s21_memset.c s21_strcat.c s21_strchr.c
+SOURCES=s21_memchr.c s21_memcmp.c s21_strlen.c s21_memmove.c s21_strncat.c s21_strcmp.c s21_strncmp.c s21_strpbrk.c s21_memset.c s21_strcat.c s21_strchr.c s21_strstr.c
 OBJECTS=$(SOURCES:.c=.o)
 LIBRARY=s21_test.c s21_string.a
 GCOVFLAGS=--coverage -fprofile-arcs -ftest-coverage

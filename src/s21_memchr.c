@@ -1,8 +1,6 @@
-//memchr – поиск первого вхождения указанного символа в массиве
-
 #include "s21_string.h"
 #include <stdio.h>
-// #include <string.h>
+
 void *s21_memchr(const void *str, int c, s21_size_t n)
 {
     int result = 0;
@@ -10,7 +8,6 @@ void *s21_memchr(const void *str, int c, s21_size_t n)
     if (n != 0)
     {
         const unsigned char *p = str;
-
         do
         {
             if (*p == c)
@@ -28,22 +25,3 @@ void *s21_memchr(const void *str, int c, s21_size_t n)
     }
     return (result == 1) ? s : s21_NULL;
 }
-// проверка
-// int main()
-// {
-
-//     char *sym;
-//     char *sym1;
-//     // исходные массивы
-//     unsigned const char str[5] = "1234";
-//     unsigned const char str1[5] = "1234";
-
-//     sym = s21_memchr(str, '!', 4);
-//     sym1 = memchr(str1, '!', 4);
-//     if (sym != s21_NULL)
-//         sym[0] = '!';
-//     if (sym1 != s21_NULL)
-//         sym1[0] = '!';
-//     printf("%p %s\n", sym, sym);
-//     printf("%p %s\n", sym1, sym1);
-// }
