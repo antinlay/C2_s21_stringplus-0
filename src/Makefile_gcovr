@@ -2,12 +2,12 @@
 BPATH=../materials/build/
 CC=gcc
 CFLAGS=-std=c11 -Wall -Werror -Wextra
+PFLAGS = -fprofile-arcs -ftest-coverage
 SOURCES=s21_sprintf.c s21_strcpy.c s21_memset.c s21_strlen.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c
 OBJECTS=$(SOURCES:.c=.o)
-PFLAGS=-fprofile-arcs -ftest-coverage
-GCOVFLAGS=--coverage
-LCOVPATH=../datasets/lcov/1.15/libexec/bin/
-HTML=$(LCOVPATH)lcov -t "test" -o rep.info -c -d .; $(LCOVPATH)genhtml -o report rep.info
+GCOVPATH=../datasets/gcovr/5.1/libexec/bin/
+GCOVFLAGS=-lgcov --coverage
+GCONV_FLAGS=$(GCOVPATH)gcovr
 OS := $(shell uname)
 
 ifeq ($(OS), Darwin)
@@ -24,12 +24,15 @@ s21_string.a: clean
 	ranlib $(BPATH)s21_string.a
 
 test: clean s21_string.a
-	$(CC) $(CFLAGS) $(GCOVFLAGS) $(PFLAGS) s21_test.c $(BPATH)s21_string.a $(SOURCES) -o $(BPATH)test $(CHECK_H)
+	$(CC) $(CFLAGS) -c $(PFLAGS) s21_test.c $(SOURCES)
+	$(CC) $(CHECK_H) $(GCOVFLAGS) -o $(BPATH)test s21_test.o $(BPATH)s21_string.a $(OBJECTS)
 	$(BPATH)test # DELETE BEFORE FINISH PROJECT
 
 gcov_report: clean test
-	$(HTML)
-	open ./report/index.html # DELETE BEFORE FINISH PROJECT
+	$(GCONV_FLAGS) -r . --html-details -o $(BPATH)report.html
+	open $(BPATH)report.html # DELETE BEFORE FINISH PROJECT
 
 clean:
-	rm -rf *.o $(BPATH)*.a *.so *.gcda *.gcno *.gch rep.info *.html *.css $(BPATH)test report
+	rm -rf *.o *.gcno $(BPATH)*.a $(BPATH)*.so *.gcda $(BPATH)*.gch $(BPATH)*.html $(BPATH)*.css $(BPATH)test $(BPATH)report
+
+

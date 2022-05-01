@@ -11,7 +11,9 @@ int s21_sprintf(char *str, char *format, ...)
     for (char *p = format;*p; p++) {
         if (*p != '%') {
             out += 1;
+            printf("%d\n", out);
             str[strlen(str)] = *p;
+            printf("%s\n", str);
         }
     }
     va_end(p_arg); // завершаем обработку параметров
