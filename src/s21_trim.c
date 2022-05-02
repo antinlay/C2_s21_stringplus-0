@@ -43,7 +43,7 @@ void *s21_trim(const char *src, const char *trim_chars) {
             end_index++;
         }
 
-        res = (char*)malloc((len_src - start_index - end_index + 1) * sizeof(char));
+        res = (char*)malloc((len_src - start_index - end_index) * sizeof(char));
 
         for (int i = 0; i + start_index < (int)len_src - end_index; i++) {
             res[i] = out[i + start_index];

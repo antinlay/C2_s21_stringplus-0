@@ -1,8 +1,8 @@
 #include "s21_string.h"
 
 s21_size_t s21_strlen(const char *str) {
-  register const char *s;
-  for (s = str; *s; ++s) {;
+  const char *s;
+  for (s = str; *s != '\0'; ++s) {;
   }
   return(s - str);
 }
