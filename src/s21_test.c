@@ -32,12 +32,41 @@ START_TEST(s21_sprintf_test) {
   ck_assert_int_eq(s21_sprintf(r, "%%"), sprintf(r, "%%"));
 } END_TEST
 
+START_TEST(s21_insert_test) {
+  char *src = "He Wollorld&llo\0";
+  char *trim_chars = "llo";
+  void *out;
+
+  out = s21_insert(src, trim_chars, 2);
+  // printf("%p\n", out);
+  ck_assert_str_eq(out, "Hello Wollorld&llo\0");
+  free(out);
+} END_TEST
+
+// START_TEST(s21_trim_test) {
+//   char *src = "Hello Wollorld&lol";
+//   char *trim_chars = "llo";
+//   void *out;
+
+//   out = s21_trim(src, trim_chars);
+//   printf("%p\n", out);
+//   ck_assert_str_eq(out, "Hello Wollorld&llo");
+//   free(out);
+// } END_TEST
+
+START_TEST(s21_to_lower_test) {
+  char *str = "GFDKHJGFKJGFD";
+  char *out1 = s21_to_lower(str);
+  char *out2 = "gfdkhjgfkjgfd";
+  ck_assert_str_eq(out1, out2);
+  free(out1);
+}
+
 START_TEST(s21_to_upper_test) {
   char *str = "gfdkhjgfkjgfd";
   char *out1 = s21_to_upper(str);
   char *out2 = "GFDKHJGFKJGFD";
   ck_assert_str_eq(out1, out2);
-  // printf("%s", res);
   free(out1);
 }
 
@@ -188,23 +217,19 @@ int main(void) {
     tcase_add_test(case_test, s21_strerror_test);
     tcase_add_test(case_test, s21_sprintf_test);
     tcase_add_test(case_test, s21_to_upper_test);
+    tcase_add_test(case_test, s21_to_lower_test);
+    // tcase_add_test(case_test, s21_trim_test);
+    tcase_add_test(case_test, s21_insert_test);
+    char *src = "aboba";
+    char *trim = "abo";
+  // void *out;
+    printf("%s\n", src);
+    s21_trim(src, trim);
+    printf("%s\n", trim);
+    printf("%s\n", src);
     srunner_run_all(sr, CK_NORMAL);
     num_failed = srunner_ntests_failed(sr);
     srunner_free(sr);
-    // char c[20];
-    // s21_sprintf(c, "%e", 0.0005);
-    // printf("\n%s\n", c);
-    // s21_sprintf(c, "%E", 0.0005);
-    // printf("\n%s\n", c);
-    
-    // s21_sprintf(c, "%g", 0.00005);
-    // printf("\n%s\n", c);
-    // s21_sprintf(c, "%g", 0.00055);
-    // printf("\n%s\n", c);
-    // s21_sprintf(c, "%G", 0.00005);
-    // printf("\n%s\n", c);
-    // s21_sprintf(c, "%G", 0.00055);
-    // printf("\n%s\n", c);
     return (num_failed != 0) ? 1 : 0;
 }
 

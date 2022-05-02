@@ -2,7 +2,7 @@
 BPATH=../materials/build/
 CC=gcc
 CFLAGS=-std=c11 -Wall -Werror -Wextra
-SOURCES=s21_sprintf.c s21_to_upper.c s21_strcpy.c s21_memset.c s21_strlen.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c
+SOURCES=s21_sprintf.c s21_insert.c s21_trim.c s21_to_upper.c s21_to_lower.c s21_strcpy.c s21_memset.c s21_strlen.c s21_strcat.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c
 OBJECTS=$(SOURCES:.c=.o)
 PFLAGS=-fprofile-arcs -ftest-coverage
 GCOVFLAGS=--coverage
