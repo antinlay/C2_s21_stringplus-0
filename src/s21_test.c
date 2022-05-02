@@ -1,15 +1,46 @@
 #include <check.h>
 #include <string.h>
 #include <stdio.h>
-// #include <stdlib.h>
+#include <stdlib.h>
 
 #include "s21_string.h"
 
 START_TEST(s21_sprintf_test) {
-    char c[20];
-    int s = -412;
-    ck_assert_int_eq(s21_sprintf(c, "%d", s), sprintf(c, "%d", s));
+  char c1[999] = "";
+  char c2[999] = "";
+  char *str1 = "%-c%c%+d%-.d%i%e%E%f%g%%%-16.5o%+016.5o%s%u%x%X%.6f";
+  char r[100];
+  // int st_x = 0x1234;
+// c1 == "8     #+6111001.000000e-031.110000E-010.0009991.12353%4171731                  4171731Hello9940A16.160000"
+// c2 == "8      #+6111001.000000e-031.110000E-010.0009991.12353%4171731                  4171731Hello9940A16.160000"
+  //   %p
+  // char str2[200] = "%.*d %d % f %+-*d %% %n %*.*s";
+  s21_sprintf(c1, str1, '8', '#', 6, 11, 100, 0.001, 0.111, 0.000999, 1.12354, 1111001, 1111001, "Hello", 99, 16.16, 64, 10, 11.3);
+  sprintf(c2, str1, '8', '#', 6, 11, 100, 0.001, 0.111, 0.000999, 1.12353, 1111001, 1111001, "Hello", 99, 16.16, 64, 10, 11.3);
+  ck_assert_str_eq(c1, c2);
+  // ck_assert_int_eq(s21_sprintf(r, "%x", st_x), sprintf(r, "%x", st_x));
+  // ck_assert_int_eq(s21_sprintf(r, "%16.5x", st_x), sprintf(r, "%16.5x", st_x));
+  // ck_assert_int_eq(s21_sprintf(r, "%+16.5x", st_x), sprintf(r, "%+16.5x", st_x));
+  // ck_assert_int_eq(s21_sprintf(r, "%-16.5x", st_x), sprintf(r, "%-16.5x", st_x));
+  // ck_assert_int_eq(s21_sprintf(r, "%016.5x", st_x), sprintf(r, "%016.5x", st_x));
+  // ck_assert_int_eq(s21_sprintf(r, "% 16.5x", st_x), sprintf(r, "% 16.5x", st_x));
+  // ck_assert_int_eq(s21_sprintf(r, "%#16.5x", st_x), sprintf(r, "%#16.5x", st_x));
+  int n28 = 0;
+
+  ck_assert_int_eq(s21_sprintf(r, "%n"), sprintf(r, "%n", &n28));
+  // ck_assert_int_eq(s21_sprintf(r, "%s %n", st_n), sprintf(r, "%s %n", st_n));
+
+  ck_assert_int_eq(s21_sprintf(r, "%%"), sprintf(r, "%%"));
 } END_TEST
+
+START_TEST(s21_to_upper_test) {
+  char *str = "gfdkhjgfkjgfd";
+  char *out1 = s21_to_upper(str);
+  char *out2 = "GFDKHJGFKJGFD";
+  ck_assert_str_eq(out1, out2);
+  // printf("%s", res);
+  free(out1);
+}
 
 START_TEST(s21_strrchr_test) {
   char *out1, *out2;
@@ -157,23 +188,24 @@ int main(void) {
     tcase_add_test(case_test, s21_strrchr_test);
     tcase_add_test(case_test, s21_strerror_test);
     tcase_add_test(case_test, s21_sprintf_test);
+    tcase_add_test(case_test, s21_to_upper_test);
     srunner_run_all(sr, CK_NORMAL);
     num_failed = srunner_ntests_failed(sr);
     srunner_free(sr);
-    char c[20];
-    s21_sprintf(c, "%e", 0.0005);
-    printf("\n%s\n", c);
-    s21_sprintf(c, "%E", 0.0005);
-    printf("\n%s\n", c);
+    // char c[20];
+    // s21_sprintf(c, "%e", 0.0005);
+    // printf("\n%s\n", c);
+    // s21_sprintf(c, "%E", 0.0005);
+    // printf("\n%s\n", c);
     
-    s21_sprintf(c, "%g", 0.00005);
-    printf("\n%s\n", c);
-    s21_sprintf(c, "%g", 0.00055);
-    printf("\n%s\n", c);
-    s21_sprintf(c, "%G", 0.00005);
-    printf("\n%s\n", c);
-    s21_sprintf(c, "%G", 0.00055);
-    printf("\n%s\n", c);
+    // s21_sprintf(c, "%g", 0.00005);
+    // printf("\n%s\n", c);
+    // s21_sprintf(c, "%g", 0.00055);
+    // printf("\n%s\n", c);
+    // s21_sprintf(c, "%G", 0.00005);
+    // printf("\n%s\n", c);
+    // s21_sprintf(c, "%G", 0.00055);
+    // printf("\n%s\n", c);
     return (num_failed != 0) ? 1 : 0;
 }
 

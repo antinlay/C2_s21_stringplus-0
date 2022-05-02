@@ -138,6 +138,7 @@ s21_size_t s21_strcspn(const char *str1, const char *str2);
 char *s21_strerror(int errnum);
 char *s21_strrchr(const char *str, int c);
 int s21_sprintf(char *str, const char *format, ...);
+void *s21_to_upper(const char *str);
 
   // s21_printf functions:
 int numb(const char* str);
