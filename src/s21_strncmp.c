@@ -1,6 +1,4 @@
-// #include <string.h>
 #include "s21_string.h"
-#include <stdio.h>
 
 int s21_strncmp(const char* s1, const char* s2, s21_size_t n) {
   s21_size_t i;

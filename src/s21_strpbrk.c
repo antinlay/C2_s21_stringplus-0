@@ -1,5 +1,3 @@
-#include <stdio.h>
-// #include <string.h>
 #include "s21_string.h"
 
 char * s21_strpbrk(const char *string1, const char *string2)
@@ -21,33 +19,3 @@ char * s21_strpbrk(const char *string1, const char *string2)
     return (result == 1) ? s : s21_NULL;
                     
 }
-
-// int main ()
-// {
-//    // Массив со строкой для поиска
-//    char str [11]="01234567";
-//    // Набор символов, которые должны входить в искомый сегмент
-//    char sym [10]="143";
-//    // Переменная, в которую будет занесен адрес первого найденного символа
-//    char *isym;
-
-//    //Поиск символов
-//    isym = strpbrk (str,sym);
-
-//    //Вывод результата поиска на консоль
-//    if ( isym == s21_NULL)
-//       printf ("Символы не найдены\n");
-//    else
-//       printf ("Искомый символ на позиции %ld\n",isym-str+1);
-    
-//     //Поиск символов
-//     isym = s21_strpbrk (str,sym);
-
-//     //Вывод результата поиска на консоль
-//     if ( isym == s21_NULL)
-//        printf ("Символы не найдены\n");
-//     else
-//        printf ("Искомый символ на позиции %ld\n",isym-str+1);
-
-//    return 0;
-// }
