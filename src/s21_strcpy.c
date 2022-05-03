@@ -2,6 +2,6 @@
 
 char *s21_strcpy(char *dest, const char *src) {
     const s21_size_t n = s21_strlen(src);
-    s21_memcpy(dest, src, n+1);
+    s21_memcpy(dest, src, n + 1);
     return dest;
 }
