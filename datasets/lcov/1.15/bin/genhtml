@@ -1,0 +1,2 @@
+#!/bin/bash
+PERL5LIB="/Users/janiecee/Library/homebrew/Cellar/lcov/1.15/libexec/lib/perl5" exec "/Users/janiecee/Library/homebrew/Cellar/lcov/1.15/libexec/bin/genhtml"  "$@"

@@ -2,8 +2,12 @@
 BPATH=../materials/build/
 CC=gcc
 CFLAGS=-std=c11 -Wall -Werror -Wextra
-SOURCES= s21_strcpy.c s21_memset.c s21_strlen.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c s21_memchr.c s21_memcmp.c s21_memmove.c s21_strncat.c s21_strcmp.c s21_strncmp.c s21_strpbrk.c s21_strcat.c s21_strchr.c s21_strstr.c s21_strspn.c s21_strtok.c
+<<<<<<< src/Makefile
+SOURCES= s21_strcpy.c s21_memset.c s21_strlen.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c s21_memchr.c s21_memcmp.c s21_memmove.c s21_strncat.c s21_strcmp.c s21_strncmp.c s21_strpbrk.c s21_strcat.c s21_strchr.c s21_strstr.c s21_strspn.c s21_strtok.c s21_insert.c s21_trim.c s21_to_upper.c s21_to_lower.c s21_sprintf.c
 
+=======
+SOURCES=s21_strcpy.c s21_memset.c s21_strlen.c s21_strcat.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c s21_insert.c s21_trim.c s21_to_upper.c s21_to_lower.c s21_sprintf.c
+>>>>>>> src/Makefile
 OBJECTS=$(SOURCES:.c=.o)
 PFLAGS=-fprofile-arcs -ftest-coverage
 GCOVFLAGS=--coverage
@@ -21,11 +25,19 @@ all: clean gcov_report
 
 s21_string.a: clean
 	$(CC) $(CFLAGS) -c $(PFLAGS) $(SOURCES)
+<<<<<<< src/Makefile
 	ar rcs $(BPATH)s21_string.a $(OBJECTS)
 	ranlib $(BPATH)s21_string.a
 
 test: clean s21_string.a
 	$(CC) $(CFLAGS) $(GCOVFLAGS) $(PFLAGS) s21_test.c $(BPATH)s21_string.a $(SOURCES) -o $(BPATH)test $(CHECK_H)
+=======
+	ar rcs s21_string.a $(OBJECTS)
+	ranlib s21_string.a
+
+test: clean s21_string.a
+	$(CC) $(CFLAGS) $(GCOVFLAGS) $(PFLAGS) s21_test.c s21_string.a $(SOURCES) -o $(BPATH)test $(CHECK_H)
+>>>>>>> src/Makefile
 	$(BPATH)test # DELETE BEFORE FINISH PROJECT
 
 gcov_report: clean test
@@ -33,4 +45,8 @@ gcov_report: clean test
 	open ./report/index.html # DELETE BEFORE FINISH PROJECT
 
 clean:
+<<<<<<< src/Makefile
 	rm -rf *.o $(BPATH)*.a *.so *.gcda *.gcno *.gch rep.info *.html *.css $(BPATH)test report
+=======
+	rm -rf *.o *.a *.so *.gcda *.gcno *.gch rep.info *.html *.css $(BPATH)test report
+>>>>>>> src/Makefile

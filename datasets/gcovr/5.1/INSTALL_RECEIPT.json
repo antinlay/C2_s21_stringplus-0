@@ -1,0 +1,99 @@
+{
+  "homebrew_version": "3.4.3-56-g8485a7c",
+  "used_options": [
+
+  ],
+  "unused_options": [
+
+  ],
+  "built_as_bottle": true,
+  "poured_from_bottle": true,
+  "installed_as_dependency": false,
+  "installed_on_request": true,
+  "changed_files": [
+    "libexec/bin/gcovr",
+    "libexec/bin/pip",
+    "libexec/bin/pip3",
+    "libexec/bin/pip3.10",
+    "libexec/bin/pygmentize",
+    "libexec/lib/python3.10/site-packages/pkg_resources/_vendor/appdirs.py",
+    "libexec/bin/activate",
+    "libexec/bin/activate.csh",
+    "libexec/bin/activate.fish",
+    "libexec/lib/python3.10/site-packages/pip/_internal/cli/cmdoptions.py",
+    "libexec/lib/python3.10/site-packages/pip/_internal/locations/__init__.py",
+    "libexec/lib/python3.10/site-packages/pip/_internal/locations/_distutils.py",
+    "libexec/lib/python3.10/site-packages/pip/_internal/locations/_sysconfig.py",
+    "libexec/lib/python3.10/site-packages/pip/_vendor/platformdirs/unix.py",
+    "libexec/lib/python3.10/site-packages/setuptools/_distutils/unixccompiler.py",
+    "libexec/pyvenv.cfg"
+  ],
+  "time": 1651420716,
+  "source_modified_time": 1648320582,
+  "compiler": "clang",
+  "aliases": [
+
+  ],
+  "runtime_dependencies": [
+    {
+      "full_name": "gdbm",
+      "version": "1.23",
+      "declared_directly": false
+    },
+    {
+      "full_name": "mpdecimal",
+      "version": "2.5.1",
+      "declared_directly": false
+    },
+    {
+      "full_name": "ca-certificates",
+      "version": "2022-04-26",
+      "declared_directly": false
+    },
+    {
+      "full_name": "openssl@1.1",
+      "version": "1.1.1n",
+      "declared_directly": false
+    },
+    {
+      "full_name": "readline",
+      "version": "8.1.2",
+      "declared_directly": false
+    },
+    {
+      "full_name": "sqlite",
+      "version": "3.38.3",
+      "declared_directly": false
+    },
+    {
+      "full_name": "xz",
+      "version": "5.2.5",
+      "declared_directly": false
+    },
+    {
+      "full_name": "python@3.10",
+      "version": "3.10.4",
+      "declared_directly": true
+    }
+  ],
+  "source": {
+    "spec": "stable",
+    "versions": {
+      "stable": "5.1",
+      "head": null,
+      "version_scheme": 0
+    },
+    "path": "/Users/janiecee/Library/homebrew/Library/Taps/homebrew/homebrew-core/Formula/gcovr.rb",
+    "tap_git_head": "8c48b914d20901affef2680b048ff19bd4893f39",
+    "tap": "homebrew/core"
+  },
+  "arch": "x86_64",
+  "built_on": {
+    "os": "Macintosh",
+    "os_version": "macOS 11.6",
+    "cpu_family": "penryn",
+    "xcode": "13.2.1",
+    "clt": "13.2.0.0.1.1638488800",
+    "preferred_perl": "5.30"
+  }
+}
