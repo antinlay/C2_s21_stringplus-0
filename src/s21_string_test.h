@@ -1,6 +1,5 @@
-#ifndef TEST_H_
-#define TEST_H_
-#include <stdio.h>
+#ifndef _S21_STIRNG_TEST_H_
+#define _S21_STIRNG_TEST_H_
 
 char s1[40] = "Hello world\0";
 char s2[40] = "Hello world\n\0";
