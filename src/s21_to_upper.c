@@ -1,5 +1,5 @@
 #include "s21_string.h"
-#include <stdlib.h>
+// #include <stdlib.h>
 
 void *s21_to_upper(const char *str) {
   int len = s21_strlen(str);
@@ -15,5 +15,6 @@ void *s21_to_upper(const char *str) {
     }
     i++;
   }
+  up_str[i] = '\0';
   return len != 0 ? up_str : s21_NULL;
 }

@@ -1,8 +1,8 @@
 #include "s21_string.h"
-#include <stdlib.h>
+// #include <stdlib.h>
 
 void *s21_trim(const char *src, const char *trim_chars) {
-    if (trim_chars == s21_NULL || s21_strlen(trim_chars) == 0) trim_chars = " ";
+    if (trim_chars == s21_NULL || s21_strlen(trim_chars) == 0) trim_chars = "";
 
     int ok = 0;
     if (src == s21_NULL) ok = 1;

@@ -4,5 +4,6 @@ s21_size_t s21_strlen(const char *str) {
   const char *s;
   for (s = str; *s != '\0'; ++s) {;
   }
-  return(s - str);
+  s21_size_t len = s - str;
+  return len;
 }

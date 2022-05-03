@@ -43,9 +43,9 @@ START_TEST(s21_insert_test) {
 } END_TEST
 
 START_TEST(s21_trim_test) {
-  char src2[50] = "lloWollorld&lol\0";
+  char src2[50] = "llo Wollorld&lol\0";
   char trim_chars2[10] = "llo\0";
-  char res[50] = "Wollorld&c\0";
+  char res[50] = " Wollorld&\0";
   void *out2;
   out2 = s21_trim(src2, trim_chars2);
   ck_assert_str_eq(out2, res);
@@ -53,16 +53,16 @@ START_TEST(s21_trim_test) {
 } END_TEST
 
 START_TEST(s21_to_upper_test) {
-  char *str_u = "aZi13E1234\0";
-  char *out4 = "AZI13E1234\0";
+  char *str_u = "aZi13E1";
+  char *out4 = "AZI13E1";
   ck_assert_str_eq(s21_to_upper(str_u), out4);
 
   // free(out1);
 } END_TEST
 
 START_TEST(s21_to_lower_test) {
-  char *str_l = "AZI13E1234\0";
-  char *out6 = "azi13e1234\0";
+  char *str_l = "AZI13E1";
+  char *out6 = "azi13e1";
   ck_assert_str_eq(s21_to_lower(str_l), out6);
   // free(out1);
 } END_TEST
@@ -175,8 +175,8 @@ START_TEST(s21_memcpy_test) {
 
 START_TEST(s21_strlen_test) {
   s21_size_t out1, out2;
-  out1 = s21_strlen("QWERTY\0");
-  out2 = strlen("QWERTY\0");
+  out1 = s21_strlen("QWER\0");
+  out2 = strlen("QWER\0");
   ck_assert_int_eq(out1, out2);
   out1 = s21_strlen("\0");
   out2 = strlen("\0");

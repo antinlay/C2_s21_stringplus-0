@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 // #include <stdio.h>
-// #include <stdlib.h>
+#include <stdlib.h>
 
 #ifndef _S21_STRING_H_
 #define _S21_STRING_H_
