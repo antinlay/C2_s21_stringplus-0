@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "queue": "c",
+        "random": "c",
+        "string.h": "c",
+        "stddef.h": "c",
+        "s21_string.h": "c",
+        "algorithm": "c"
+    }
+}
