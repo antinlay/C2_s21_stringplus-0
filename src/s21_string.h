@@ -160,13 +160,16 @@ char* s21_strstr(const char* s, const char* find);
 s21_size_t s21_strspn(const char* str1, const char* str2);
 char* s21_strtok(char* str, const char* delim);
 
-// bonus functions
+  // bonus functions
 void* s21_to_upper(const char* str);
 void* s21_to_lower(const char* str);
 void* s21_insert(const char* src, const char* str, s21_size_t start_index);
 void* s21_trim(const char* src, const char* trim_chars);
 
-// s21_printf functions:
+  // additition functions:
+void s21_itoa(int n, char *str);
+
+  // s21_printf functions:
 int s21_sprintf(char* str, const char* format, ...);
 int numb(const char* str);
 int length(const char* str);

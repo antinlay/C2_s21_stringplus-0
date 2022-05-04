@@ -2,7 +2,7 @@
 
 char *s21_strtok(char *str, const char *delim) {
     int s = 0;
-    static char *next;
+    char *next;
 
     if (str) {
         next = str;
