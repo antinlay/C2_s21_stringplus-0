@@ -4,10 +4,11 @@ void *s21_memmove(void *dest, const void *src, s21_size_t len) {
     char *d = dest;
     const char *s = src;
     if (d < s) {
-        while (len--) *d = *s;
+        while (len--) { *d = *s;
         d++;
         s++;
-        len--;
+        // len--;
+        }
     } else {
         const char *lasts = s + (len - 1);
         char *lastd = d + (len - 1);
@@ -18,5 +19,6 @@ void *s21_memmove(void *dest, const void *src, s21_size_t len) {
             len--;
         }
     }
+    d[s21_strlen(dest)] = '\0';
     return dest;
 }

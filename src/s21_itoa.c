@@ -1,37 +1,37 @@
 #include "s21_string.h"
-// #include <stdio.h>
 
-void s21_itoa(int n, char *str) {
-    int num = 0, i = 0;
-    // num - temp chisla, i - kolichestvo celyh desyatkov
+char *s21_convert(unsigned int num, int base) {
+    static char Representation[] = "0123456789ABCDEF";
+    static char buffer[50];
+    char *ptr;
+    ptr = &buffer[49];
+    *ptr = '\0';
+    do {
+        *--ptr = Representation[num % base];
+        num /= base;
+    } while (num != 0);
+    return ptr;
+}
+
+void s21_itoa(int n, int base, char *buf) {
+    char *str;
     if (n < 0) {
-        num = (n = -n);
-        for (i = 1; num >= 10; num /= 10) {
-            i *= 10;
-        }
-        *str++ = '-';
-        for (; i > 0; i /= 10) {
-            *str++ = 48 + n / i;  // esli i < 10 togda i = 1
-            n %= i;
-        }
-        *str = '\0';
-    } else {
-        num = n;
-        for (i = 1; num >= 10; num /= 10) {
-            i *= 10;
-        }
-        for (; i > 0; i /= 10) {
-            *str++ = 48 + n / i;  // esli i < 10 togda i = 1
-            n %= i;
-        }
-        *str = '\0';
+        n = -n;
+        *buf = '-';
+        buf++;
+    }
+    str = s21_convert(n, base);
+    while (*str != '\0') {
+        *buf = *str;
+        str++;
+        buf++;
     }
 }
 
 // int main(void) {
-//     char str1[40];
-//     int num = -431;
-//     s21_itoa(num, str1);
-//     printf("%s", str1);
+//     char str[12];
+//     int num = 999999;
+//     s21_itoa(num, 10, str);
+//     printf("%s", str);
 //     return 0;
 // }

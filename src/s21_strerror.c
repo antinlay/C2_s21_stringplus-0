@@ -1,24 +1,31 @@
 #include "s21_string.h"
-#define UNK_ERR "Unknown error: "
 
 char *s21_strerror(int errnum) {
     char *resnum[] = S21_ERRLIST;
-    static char ebuf[40] = UNK_ERR;
+    char ebuf[100] = UNK_ERR;
     int n = sizeof(resnum) / sizeof(resnum[0]);
-    char *res = s21_NULL;
-    char tmp[100] = "\0";
-    if (errnum < 0 || errnum > n) {
-        s21_itoa(errnum, tmp);
-        res = s21_strcat(ebuf, tmp);
-    } else
-        res = resnum[errnum];
+    static char res[100]= "";
+    char buf[100] = "\0";
+    if (errnum >= 0 && errnum < n) {
+        s21_memmove(res, resnum[errnum], 100);
+    } else {
+        s21_itoa(errnum, 10, buf);
+        s21_strcat(ebuf, buf);
+        s21_memmove(res, ebuf, 100);
+    }
     return res;
 }
 
 // int main(void) {
-//     for (int k = -5; k < 5; k++) {
-//         printf("%s\n", s21_strerror(k));
+//     // int k =-5;
+//     for (int k = -6; k < 5; k++) {
+//         // s21_strerror(k);
+//         // puts(strerror(k));
+//         // strerror(k);
+//         // printf("%d\n", k);
+//         char *res = s21_strerror(k);
+//         printf("%s\n", res);
 //     }
-    
+
 //     return 0;
 // }

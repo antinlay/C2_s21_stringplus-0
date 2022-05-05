@@ -158,7 +158,7 @@ START_TEST(s21_strlen_test) {
 END_TEST
 
 START_TEST(s21_strerror_test) {
-    for (int n = -1; n <= 107; n++) {
+    for (int n = -100; n <= 140; n++) {
         char *out1 = s21_strerror(n);
         char *out2 = strerror(n);
         ck_assert_str_eq(out1, out2);
