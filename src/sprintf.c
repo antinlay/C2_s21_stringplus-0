@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "s21_string.h"
+
 struct s_sprintf {
     va_list args;  //  argument dlya zapisi
     int wdt;       //  shirina
@@ -15,76 +17,55 @@ struct s_sprintf {
     int sp;        // ' ' flag probela
 };
 
-char *s21_itoa(int n, char *str) {
-    int num = 0, i = 0;
-    // num - temp chisla, i - kolichestvo celyh desyatkov
-    if (n < 0) {
-        num = (n = -n);
-        for (i = 1; num >= 10; num /= 10) {
-            i *= 10;
-        }
-        *str++ = '-';
-        for (; i > 0; i /= 10) {
-            *str++ = 48 + n / i;  // esli i < 10 togda i = 1
-            n %= i;
-        }
-        *str = '\0';
-    } else {
-        num = n;
-        for (i = 1; num >= 10; num /= 10) {
-            i *= 10;
-        }
-        for (; i > 0; i /= 10) {
-            *str++ = 48 + n / i;  // esli i < 10 togda i = 1
-            n %= i;
-        }
-        *str = '\0';
-    }
-    return str;
-}
-
 void parser(char *str, const char *format, struct s_sprintf init) {
-    int i = -1, j = 0, symb = 0;
-    // char *buf, *s;
+    int i = 0, j = 0, symb = 0;
+    char buf[40];
     while (format[i++]) {
         if (format[i] == '%') {
             // if (*format++ == '%' || *format++ == 'c' || *++format == 'd' ||
             //     *++format == 'i' || *++format == 'f' || *++format == 's' ||
             //     *++format == 'u' || *++format == '-' || *++format == '.' ||
             //     *++format == ' ' || *++format == 'h' || *++format == 'l') {
-                if (format[i + 1] == 'c') {
-                    symb = va_arg(init.args, int);
-                    str[j] = symb;
-                    i++;
+            if (format[i + 1] == 'c') {
+                symb = va_arg(init.args, int);
+                str[j] = symb;
+                i++;
+                j++;
+            }
+            if (format[i + 1] == 'd') {
+                s21_size_t k = 0;
+                symb = va_arg(init.args, int);
+                s21_itoa(symb, BASE, buf);
+                printf("%s\n", buf);
+                do {
+                    str[j] = buf[k];
                     j++;
-                }
-                // if (format[i + 1] == 'd') {
-                //     symb = va_arg(init.args, int);
-                //     s = s21_itoa(symb, buf);
-                //     str[j] = s;
-                //     i++;
-                //     j++;
-                // }
-                // if (*++format = 'i') {
-                //     *str++ = va_arg(init.args, float);
-                // }
-                // if (*++format = 'f') {
-                //     *str++ = va_arg(init.args, float);
-                // }
-                // if (*++format = 's') {
-                //     *str++ = va_arg(init.args, char *);
-                // }
-                // if (*++format = 'u') {
-                //     *str++ = va_arg(init.args, float);
-                // }
-                // if (++*format == '-') {
-                //     init.min = 1;
-                // }
-                // if (++*format == '.') {
-                //     init.pnt = 1;
-                // }
-                // if (++*format == ' ') {
-                //     init.sp = 1;
+                    k++;
+                } while (k < s21_strlen(buf));
+                i++;
+            }
+            // if (*++format = 'i') {
+            //     *str++ = va_arg(init.args, float);
+            // }
+            // if (*++format = 'f') {
+            //     *str++ = va_arg(init.args, float);
+            // }
+            // if (*++format = 's') {
+            //     *str++ = va_arg(init.args, char *);
+            // }
+            // if (*++format = 'u') {
+            //     *str++ = va_arg(init.args, float);
+            // }
+            // if (format[i + 1] == '-') {
+            //     if (format[i + 1] != ) {
+
+            //     }
+            // }
+            // if (++*format == '.') {
+            //     init.pnt = 1;
+            // }
+            // if (++*format == ' ') {
+            //     init.sp = 1;
             // }
         } else {
             str[j] = format[i];
@@ -103,7 +84,7 @@ int s21_sprintf(char *str, const char *format, ...) {
 
 int main(void) {
     char str[100];
-    char *format = "gbkjgkjdsgh c %c %d";
+    char format[50] = "%c\n%-5igfd";
     // char *l = "1231";
     struct s_sprintf init;
     init.wdt = 0;
@@ -118,10 +99,12 @@ int main(void) {
     // printf("%lu\n", strcspn(str1, "-1234567890"));
     // printf("%lu\n", strspn("1616gdfg", "-1234567890"));
     // parser(str, format, init);
-    s21_sprintf(str, format, 'b', 5);
+    sprintf(str, format, 'H', -1);
     printf("%s\n", str);
-    printf("%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n", init.wdt, init.prc,
-           init.zero, init.pnt, init.min, init.len, init.sign, init.perc,
-           init.sp);
+    printf(
+        "wdt = %d\tprc = %d\tzero = %d\tpnt = %d\tmin = %d\tlen = %d\tsign = "
+        "%d\tperc = %d\tsp = %d\n",
+        init.wdt, init.prc, init.zero, init.pnt, init.min, init.len, init.sign,
+        init.perc, init.sp);
     return 0;
 }

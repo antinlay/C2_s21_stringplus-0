@@ -9,6 +9,8 @@
 
 #define s21_NULL ((void*)0)
 typedef long unsigned s21_size_t;
+#define BASE 10
+
 #if defined(__linux__)
 #define UNK_ERR "Unknown error \0"
 #define S21_ERRLIST                                                            \

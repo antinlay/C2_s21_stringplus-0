@@ -1,4 +1,5 @@
 #include "s21_string.h"
+#include <stdio.h>
 
 char *s21_convert(unsigned int num, int base) {
     static char Representation[] = "0123456789ABCDEF";
@@ -26,12 +27,13 @@ void s21_itoa(int n, int base, char *buf) {
         str++;
         buf++;
     }
+    *buf = '\0';
 }
 
 // int main(void) {
 //     char str[12];
-//     int num = 999999;
-//     s21_itoa(num, 10, str);
+//     int num = 165;
+//     s21_itoa(num, BASE, str);
 //     printf("%s", str);
 //     return 0;
 // }
