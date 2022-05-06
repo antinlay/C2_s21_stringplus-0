@@ -1,3 +1,7 @@
+#include <check.h>
+#include <stdio.h>
+#include <string.h>
+
 #ifndef _S21_STIRNG_TEST_H_
 #define _S21_STIRNG_TEST_H_
 
@@ -18,5 +22,6 @@ char s14[15] = "/";
 char s15[15] = "/0000/12345";
 char s16[15] = "/0000/12345";
 char s17[15] = "Hello world\0";
+char *s18 = NULL;
 
 #endif

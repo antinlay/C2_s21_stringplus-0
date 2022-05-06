@@ -1,10 +1,5 @@
-#include "s21_string_test.h"
-
-#include <check.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "s21_string.h"
+#include "s21_string_test.h"
 
 START_TEST(s21_sprintf_test) {
     char c1[999] = "";
@@ -44,11 +39,15 @@ END_TEST
 START_TEST(s21_insert_test) {
     char src1[30] = "He Wollorld&llo\0";
     char trim_chars1[6] = "llo\0";
+    char *src2 = s21_NULL;
     void *out1;
 
     out1 = s21_insert(src1, trim_chars1, 2);
     ck_assert_str_eq(out1, "Hello Wollorld&llo\0");
-    // free(out1);
+    out1 = s21_insert(src2, trim_chars1, 2);
+    ck_assert_ptr_eq(out1, s18);
+    out1 = s21_insert(src1, trim_chars1, 100);
+    ck_assert_ptr_eq(out1, s21_NULL);
 }
 END_TEST
 

@@ -53,6 +53,8 @@ dkms.conf
 
 # Store files and VS code
 .DS_Store
-.vscode/
+.gitignore
+.vscode/*
+src/.vscode/*
 /datasets/.DS_Store
 /materials/.DS_Store
