@@ -16,18 +16,18 @@ else
 	CHECK_H=-lcheck -lsubunit -lm -lrt -lpthread -D_GNU_SOURCE
 endif
 
-all: clean gcov_report
+all: gcov_report
 
 s21_string.a: clean
 	$(CC) $(CFLAGS) -c $(PFLAGS) $(SOURCES)
 	ar rcs s21_string.a $(OBJECTS)
 	ranlib s21_string.a
 
-test: clean s21_string.a
+test: s21_string.a
 	$(CC) $(CFLAGS) $(GCOVFLAGS) $(PFLAGS) s21_string_test.c s21_string.a $(SOURCES) -o $(BPATH)test $(CHECK_H)
 	$(BPATH)test # DELETE BEFORE FINISH PROJECT
 
-gcov_report: clean test
+gcov_report: test
 	$(HTML)
 	open ./report/index.html # DELETE BEFORE FINISH PROJECT
 
