@@ -1,5 +1,7 @@
+#include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "s21_string.h"
@@ -36,14 +38,14 @@ int s21_valist(char buf[40]);
 void p_flag(char input_char);
 void parser(char *str, const char *format);
 int s21_sprintff(char *str, const char *format, ...);
-void s21_ftoa(const char *fbuf, double num);
+void s21_ftoa(const char *fbuf, long double num);
 
 int main(void) {
   char str0[100], str1[100];
   int num0 = 19;
   int num1 = -149;
   s21_size_t unum0 = 22;
-  float fnum0 = -12312.070704;
+  double fnum0 = 1266.986432423;
   // char test = 'W';
   // char s[30] = "WAGA669*))";
   // char format[1000] =
@@ -119,24 +121,27 @@ int s21_atoi(const char *format, int i) {
   return digit;
 }
 
-void s21_ftoa(const char *fbuf, double num) {
-  int i = 0;
-  int int_p = (int)num;
+void s21_ftoa(const char *fbuf, long double num) {
   char p_buf[100] = "";
   char buf_p[100] = "";
-  int p_fl = 0;
-  if (num < 0) {
-    p_fl = (int)(num * -100000) % 100000;
-    printf("%d\n", p_fl);
-    int_p = (-1) * int_p;
-  } else {
-    p_fl = (int)(num * 1000000) % 1000000;
-    int_p = int_p;
+  p.prc == 6;
+  int pow_num = 10, int_p = 0, mp = 0, lp = 0, dec = 0, sign = 0;
+  fbuf = ecvt(num, p.prc, &dec, &sign);
+  while (pow_num > -1) {
+    lp = pow(BASE, pow_num);
+    mp = num / lp;
+    if (mp > 0) {
+      break;
+    }
+    pow_num--;
   }
-  s21_itoa(int_p, BASE, buf_p);
-  printf("%s.%s\n", buf_p, p_buf);
-  s21_itoa(p_fl, BASE, p_buf);
-  printf("%s.%s\n", buf_p, p_buf);
+  pow_num += 1;
+  printf("fbuf %s\nmp %d\nPOW_NUM %d\n", fbuf, mp, pow_num);
+
+  // s21_itoa(int_p, BASE, buf_p);
+  // printf("%s.%s\n", buf_p, p_buf);
+  // s21_itoa(p_fl, BASE, p_buf);
+  // printf("%s.%s\n", buf_p, p_buf);
 }
 
 // // int s21_valist(char buf[40]) {
