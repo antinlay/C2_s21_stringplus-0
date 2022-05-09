@@ -22,7 +22,7 @@ s21_string.a: clean
 	$(CC) $(CFLAGS) -c $(PFLAGS) $(SOURCES)
 	ar rcs s21_string.a $(OBJECTS)
 	ranlib s21_string.a
-
+# checkmk clean_mode=1 asd.check > string_test.c
 test: s21_string.a
 	$(CC) $(CFLAGS) $(GCOVFLAGS) $(PFLAGS) s21_string_test.c s21_string.a $(SOURCES) -o $(BPATH)test $(CHECK_H)
 	$(BPATH)test # DELETE BEFORE FINISH PROJECT

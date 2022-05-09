@@ -3,60 +3,61 @@
 #include <string.h>
 
 #include "s21_string.h"
-// #define C 99
-// #define D 100
-// #define I 105
 // #define E 101
 // #define B_E 69
 // #define F 102
 // #define G 103
 // #define B_G 71
 // #define O 111
-// #define S 115
 // #define U 117
 // #define X 120
 // #define B_X 88
 // #define P 112
 // #define N 110
-// #define PR 37
 
 struct s_sprintf {
-    // va_list args;  //  argument dlya zapisi
-    int wdt;    //  shirina
-    int prc;    //  tochnost'
-    int zero;   //  00123.1
-    int pnt;    //  . tochka
-    int min;    //  - minus
-    int len;    //  poluchennaya dlina stroki
-    int sign;   //  (+ ili -) polozhitel'noe ili otricatel'noe
-    int perc;   // % procent
-    int align;  // ' ' and '0' flag align
-    char spec;  // specificator (d, c, s, i)
+  va_list args;  //  argument dlya zapisi
+  int wdt;       //  shirina
+  int prc;       //  tochnost'
+  int zero;      //  00123.1
+  int pnt;       //  . tochka
+  int min;       //  - minus
+  int len;       //  poluchennaya dlina stroki
+  int sign;      //  (+ ili -) polozhitel'noe ili otricatel'noe
+  int perc;      // % procent
+  int align;     // ' ' and '0' flag align
+  char spec;     // specificator (d, c, s, i)
 } p;
 
 void s21_zero(char str[40], char format[40], char buf[40], int j, int i);
-int s21_swrite(char str[40], char buf[40], int j, int len);
+int s21_swrite(char str[40], char buf[40], int j);
 int s21_atoi(const char *buf, int i);
 int s21_valist(char buf[40]);
 void p_flag(char input_char);
 void parser(char *str, const char *format);
 int s21_sprintff(char *str, const char *format, ...);
+void s21_ftoa(const char *fbuf, double num);
 
 int main(void) {
-    char str0[100], str1[100];
-    // int num0 = 19;
-    // int num1 = -149;
-    char test = 'W';
-    char format[50] = "%c INT: %cvgfd %c";
-    s21_sprintff(str0, format, test, test, test);
-    sprintf(str1, format, test, test, test);
-    printf("STR0: %s\nSTR1: %s\nCHAR: %c\n", str0, str1, test);
-    // printf(
-    //     "\nSTRUCT:\nwdt = %d\nprc = %d\nzero = %d\npnt = %d\nmin = %d\nlen =
-    //     "
-    //     "%d\nsign = %d\nperc = %d\nsp = %d\n",
-    //     p.wdt, p.prc, p.zero, p.pnt, p.min, p.len, p.sign, p.perc, p.align);
-    // return 0;
+  char str0[100], str1[100];
+  int num0 = 19;
+  int num1 = -149;
+  s21_size_t unum0 = 22;
+  float fnum0 = -12312.070704;
+  // char test = 'W';
+  // char s[30] = "WAGA669*))";
+  // char format[1000] =
+  //     "CHAR: %c\tD_INT: %d\tI_INT: %i\tSTR0: %s\tssSIZE_T: %u %%[] %d as";
+  // s21_sprintff(str0, format, test, num0, num1, s, unum0, num0);
+  // sprintf(str1, format, test, num0, num1, s, unum0, num0);
+  // printf("STR0: %s\nSTR1: %s\n", str0, str1);
+  s21_ftoa(str0, fnum0);
+  // printf(
+  //     "\nSTRUCT:\nwdt = %d\nprc = %d\nzero = %d\npnt = %d\nmin = %d\nlen =
+  //     "
+  //     "%d\nsign = %d\nperc = %d\nsp = %d\n",
+  //     p.wdt, p.prc, p.zero, p.pnt, p.min, p.len, p.sign, p.perc, p.align);
+  // return 0;
 }
 
 // int s21_align(char str[40], int j, int align) {
@@ -97,26 +98,46 @@ int main(void) {
 //     }
 // }
 
-int s21_swrite(char str[40], char buf[40], int j, int len) {
-    int k = 0;
-    do {
-        str[j] = buf[k];
-        j++;
-        k++;
-    } while (k < len);
-    return k;
+int s21_swrite(char str[40], char buf[40], int i) {
+  int k = 0;
+  do {
+    str[i] = buf[k];
+    i++;
+    k++;
+  } while (buf[k]);
+  return k;
 }
 
-// int s21_atoi(const char *format, int i) {
-//     int digit = 0;
-//     for (; format[i] >= 0x30 && format[i] <= 0x39; i++) {
-//         digit = digit + (format[i] & 0x0F);
-//         digit *= BASE;
-//     }
-//     digit /= BASE;
-//     // printf("FDIGIT = %d\nFATOI i = %d\n FBUF = %s\n", digit, i, format);
-//     return digit;
-// }
+int s21_atoi(const char *format, int i) {
+  int digit = 0;
+  for (; format[i] >= 0x30 && format[i] <= 0x39; i++) {
+    digit = digit + (format[i] & 0x0F);
+    digit *= BASE;
+  }
+  digit /= BASE;
+  // printf("FDIGIT = %d\nFATOI i = %d\n FBUF = %s\n", digit, i, format);
+  return digit;
+}
+
+void s21_ftoa(const char *fbuf, double num) {
+  int i = 0;
+  int int_p = (int)num;
+  char p_buf[100] = "";
+  char buf_p[100] = "";
+  int p_fl = 0;
+  if (num < 0) {
+    p_fl = (int)(num * -100000) % 100000;
+    printf("%d\n", p_fl);
+    int_p = (-1) * int_p;
+  } else {
+    p_fl = (int)(num * 1000000) % 1000000;
+    int_p = int_p;
+  }
+  s21_itoa(int_p, BASE, buf_p);
+  printf("%s.%s\n", buf_p, p_buf);
+  s21_itoa(p_fl, BASE, p_buf);
+  printf("%s.%s\n", buf_p, p_buf);
+}
 
 // // int s21_valist(char buf[40]) {
 // //     int symb = va_arg(p.args, int);
@@ -353,48 +374,86 @@ int s21_swrite(char str[40], char buf[40], int j, int len) {
 // }
 
 int s21_sprintff(char *str, const char *format, ...) {
-    // struct s_sprintf init;
-    char buf[40];
-    int symb = 0, i = 0, j = 0;
-    va_list args;
-    va_start(args, format);
-    // len = s21_strlen(format);
-    int k = 0, m = 0;
-    do {
-        buf[m] = format[k];
-        m++;
-        k++;
-    } while (format[k] != '\0');
-    buf[m] = '\0';
-    // s21_swrite(buf, (char*)format, j, len);
-    for (; buf[j] != '\0';j++, i++) {
-        printf("str %s\nbuf %s\n", str, buf);
-        while (buf[j] != '%') {
-            str[i] = buf[j];
-            if (buf[j] == '\0') break;
-            j += 1;
-            i += 1;
-            printf("str %s\nbuf %s\n", str, buf);
-        }
+  char buffer[10000] = "";
+  char sbuf[10000] = "";
+  char dbuf[10000] = "";
+  char *bufs = s21_NULL;
+  s21_size_t uspec = 0;
+  int spec = 0, i = 0, j = 0;
+  va_start(p.args, format);
+  int len = 0, len_s = 0;
+  do {
+    buffer[len] = *format;
+    len++;
+  } while (*format++);
+  buffer[len] = '\0';
+  while (buffer[j]) {
+    while (buffer[j] != '%') {
+      sbuf[i] = buffer[j];
+      j += 1;
+      i += 1;
+      if (buffer[j] == '\0') break;
+    }
+    switch (buffer[++j]) {
+      case 'c':
+        p.spec = 'c';
+        spec = va_arg(p.args, int);
+        sbuf[i] = spec;
         j += 1;
         i += 1;
-        if (buf[j] == '\0') break;
-        switch (buf[j]) {
-            case 'c':
-                // p.spec = 'c';
-                symb = va_arg(args, int);
-                printf("symb = %c\n", symb);
-                buf[j] = symb;
-                j++;
-                printf("str %s\nbuf %s\n", str, buf);
-                break;
+        break;
+      case 'd':
+        p.spec = 'd';
+        spec = va_arg(p.args, int);
+        s21_itoa(spec, BASE, dbuf);
+        i += s21_swrite(sbuf, dbuf, i);
+        j += 1;
+        break;
+      case 'i':
+        p.spec = 'i';
+        spec = va_arg(p.args, int);
+        s21_itoa(spec, BASE, dbuf);
+        i += s21_swrite(sbuf, dbuf, i);
+        j += 1;
+        break;
+      case 'u':
+        p.spec = 'u';
+        uspec = va_arg(p.args, s21_size_t);
+        s21_itoa(uspec, BASE, dbuf);
+        i += s21_swrite(sbuf, dbuf, i);
+        j += 1;
+        break;
+      case 's':
+        p.spec = 's';
+        bufs = va_arg(p.args, char *);
+        len_s = s21_swrite(sbuf, bufs, i);
+        i += len_s;
+        j += 1;
+        break;
+      case '%':
+        p.spec = '%';
+        sbuf[i] = p.spec;
+        j += 1;
+        i += 1;
+        break;
+      case 'f':
+        p.spec = 'f';
 
-            default:
-                break;
-        }
+      default:
+        sbuf[i] = buffer[j];
+        i += 1;
+        j += 1;
+        break;
     }
-    *buf = '\0';
-    // parser(str, format);
-    va_end(args);
-    return 0;
+  }
+  // sbuf[i] = '\0';
+  for (int m = 0; sbuf[m]; m++) {
+    *str++ = sbuf[m];
+  }
+  // for (int m = 0; bufs[m]; m++) {
+  //   *str++ = bufs[m];
+  // }
+  *str = '\0';
+  va_end(p.args);
+  return 0;
 }
