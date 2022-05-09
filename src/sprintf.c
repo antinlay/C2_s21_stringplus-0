@@ -1,4 +1,3 @@
-#include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,11 +40,12 @@ int s21_sprintff(char *str, const char *format, ...);
 void s21_ftoa(const char *fbuf, long double num);
 
 int main(void) {
-  char str0[100], str1[100];
+  char str0[100];
+  char str1[100];
   int num0 = 19;
   int num1 = -149;
   s21_size_t unum0 = 22;
-  double fnum0 = 1266.986432423;
+  double fnum0 = 986432423;
   // char test = 'W';
   // char s[30] = "WAGA669*))";
   // char format[1000] =
@@ -122,21 +122,43 @@ int s21_atoi(const char *format, int i) {
 }
 
 void s21_ftoa(const char *fbuf, long double num) {
-  char p_buf[100] = "";
+  char *p_buf;
   char buf_p[100] = "";
-  p.prc == 6;
-  int pow_num = 10, int_p = 0, mp = 0, lp = 0, dec = 0, sign = 0;
-  fbuf = ecvt(num, p.prc, &dec, &sign);
-  while (pow_num > -1) {
-    lp = pow(BASE, pow_num);
-    mp = num / lp;
-    if (mp > 0) {
-      break;
+  p.prc = 6;
+  int pow_num = 0, int_p = 0, i = 0, j = 0, dec = 0, sign = 0;
+  int_p = (int)num;
+  p_buf = fcvt(num, p.prc, &dec, &sign);
+  printf("p_buf %s\nDEC %d\nSIGN %d\nINT_P %d\n", p_buf, dec, sign, int_p);
+  if (dec == 0) {
+    if (sign == 1) {
+      buf_p[0] = '-';
+      buf_p[1] = '0';
+      buf_p[2] = '.';
+      i = 3;
+    } else {
+      buf_p[0] = '0';
+      buf_p[1] = '.';
+      i = 2;
     }
-    pow_num--;
+    while (p_buf[dec]) {
+      buf_p[i++] = p_buf[dec++];
+    }
+  } else {
+    if (sign == 1) {
+      buf_p[i++] = '-';
+    }
+    do {
+      buf_p[i++] = p_buf[j++];
+    } while (--dec);
+    buf_p[i] = '.';
+    do {
+      i += 1;
+      buf_p[i] = p_buf[j];
+    } while (p_buf[j++]);
   }
-  pow_num += 1;
-  printf("fbuf %s\nmp %d\nPOW_NUM %d\n", fbuf, mp, pow_num);
+
+  printf("p_buf %s\nbuf_p %s\nSIGN %d\nPOW_NUM %d\nINT_P %d", p_buf, buf_p,
+         sign, pow_num, int_p);
 
   // s21_itoa(int_p, BASE, buf_p);
   // printf("%s.%s\n", buf_p, p_buf);
