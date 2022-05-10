@@ -4,9 +4,6 @@
 #include <string.h>
 
 #include "s21_string.h"
-// #define E 101
-// #define B_E 69
-// #define F 102
 // #define G 103
 // #define B_G 71
 // #define O 111
@@ -37,23 +34,27 @@ int s21_valist(char buf[40]);
 void p_flag(char input_char);
 void parser(char *str, const char *format);
 int s21_sprintff(char *str, const char *format, ...);
-void s21_ftoa(const char *fbuf, long double num);
+void s21_ftoa(char buf_p[100], long double num);
 
 int main(void) {
-  char str0[100];
-  char str1[100];
-  int num0 = 19;
+  char str0[1000];
+  char str1[1000];
+  int num0 = +19;
   int num1 = -149;
   s21_size_t unum0 = 22;
-  double fnum0 = 986432423;
-  // char test = 'W';
-  // char s[30] = "WAGA669*))";
-  // char format[1000] =
-  //     "CHAR: %c\tD_INT: %d\tI_INT: %i\tSTR0: %s\tssSIZE_T: %u %%[] %d as";
-  // s21_sprintff(str0, format, test, num0, num1, s, unum0, num0);
-  // sprintf(str1, format, test, num0, num1, s, unum0, num0);
-  // printf("STR0: %s\nSTR1: %s\n", str0, str1);
-  s21_ftoa(str0, fnum0);
+  double fnum0 = -0.000098645435;
+  double fnum1 = 0.000000000612536;
+  char test = 'W';
+  char s[30] = "WAGA669*))";
+  char format[1000] =
+      "D_INT: %d\tI_INT: %i\tSTR0: %s\tssSIZE_T: %u %%[] %d "
+      "as\tFLOAT: %f\tEXP_e: %g\tEXP_E: %E\tg_exp: %g\tG_EXP: %G";
+  s21_sprintff(str0, format, num0, num1, s, unum0, num0, fnum0, fnum1, fnum1,
+               fnum0, fnum0);
+  sprintf(str1, format, num0, num1, s, unum0, num0, fnum0, fnum1, fnum1, fnum0,
+          fnum0);
+  printf("STR0: %s\nSTR1: %s\n", str0, str1);
+  // s21_ftoa(str0, fnum0);
   // printf(
   //     "\nSTRUCT:\nwdt = %d\nprc = %d\nzero = %d\npnt = %d\nmin = %d\nlen =
   //     "
@@ -121,24 +122,26 @@ int s21_atoi(const char *format, int i) {
   return digit;
 }
 
-void s21_ftoa(const char *fbuf, long double num) {
+void s21_ftoa(char buf_p[100], long double num) {
   char *p_buf;
-  char buf_p[100] = "";
-  p.prc = 6;
+  if (p.prc == 0) p.prc = 6;
   int pow_num = 0, int_p = 0, i = 0, j = 0, dec = 0, sign = 0;
   int_p = (int)num;
   p_buf = fcvt(num, p.prc, &dec, &sign);
-  printf("p_buf %s\nDEC %d\nSIGN %d\nINT_P %d\n", p_buf, dec, sign, int_p);
-  if (dec == 0) {
+  // printf("p_buf %s\nDEC %d\nSIGN %d\nINT_P %d\n", p_buf, dec, sign, int_p);
+  if (dec <= 0) {
     if (sign == 1) {
-      buf_p[0] = '-';
-      buf_p[1] = '0';
-      buf_p[2] = '.';
-      i = 3;
+      buf_p[i++] = '-';
+      buf_p[i++] = '0';
+      buf_p[i++] = '.';
     } else {
-      buf_p[0] = '0';
-      buf_p[1] = '.';
-      i = 2;
+      buf_p[i++] = '0';
+      buf_p[i++] = '.';
+    }
+    if (dec < 0) {
+      do {
+        buf_p[i++] = '0';
+      } while (++dec);
     }
     while (p_buf[dec]) {
       buf_p[i++] = p_buf[dec++];
@@ -156,16 +159,133 @@ void s21_ftoa(const char *fbuf, long double num) {
       buf_p[i] = p_buf[j];
     } while (p_buf[j++]);
   }
-
-  printf("p_buf %s\nbuf_p %s\nSIGN %d\nPOW_NUM %d\nINT_P %d", p_buf, buf_p,
-         sign, pow_num, int_p);
-
-  // s21_itoa(int_p, BASE, buf_p);
-  // printf("%s.%s\n", buf_p, p_buf);
-  // s21_itoa(p_fl, BASE, p_buf);
-  // printf("%s.%s\n", buf_p, p_buf);
+  buf_p[i] = '\0';
 }
 
+void s21_etoa(char buf_p[100], long double num) {
+  char *p_buf;
+  char e_buf[100];
+  if (p.prc == 0) p.prc = 7;
+  int e = 0, int_p = 0, i = 0, j = 0, dec = 0, sign = 0;
+  int_p = (int)num;
+  p_buf = ecvt(num, p.prc, &dec, &sign);
+  printf("p_buf %s\nDEC %d\nSIGN %d\nINT_P %d\n", p_buf, dec, sign, int_p);
+  if (dec <= 0) {
+    if (sign == 1) {
+      buf_p[i++] = '-';
+    }
+    buf_p[i++] = p_buf[j++];
+    buf_p[i++] = '.';
+    while (p_buf[j]) {
+      buf_p[i++] = p_buf[j++];
+    }
+    if ((dec - 1) <= -BASE) {
+      buf_p[i++] = p.spec;
+      dec = dec - 1;
+      s21_itoa(dec, BASE, e_buf);
+    } else {
+      buf_p[i++] = p.spec;
+      buf_p[i++] = '-';
+      buf_p[i++] = '0';
+      dec = -dec + 1;
+      s21_itoa(dec, BASE, e_buf);
+    }
+    while (e_buf[e]) {
+      buf_p[i++] = e_buf[e++];
+    }
+
+  } else {
+    if (sign == 1) {
+      buf_p[i++] = '-';
+    }
+    buf_p[i++] = p_buf[j++];
+    buf_p[i++] = '.';
+    // while (dec--) {
+    //   buf_p[i++] = p_buf[j++];
+    // }
+    while (p_buf[j]) {
+      buf_p[i++] = p_buf[j++];
+    }
+    if ((dec + 1) >= BASE) {
+      buf_p[i++] = p.spec;
+      buf_p[i++] = '+';
+      dec = dec - 1;
+      s21_itoa(dec, BASE, e_buf);
+    } else {
+      buf_p[i++] = p.spec;
+      buf_p[i++] = '+';
+      buf_p[i++] = '0';
+      dec = dec - 1;
+      s21_itoa(dec, BASE, e_buf);
+    }
+    while (e_buf[e]) {
+      buf_p[i++] = e_buf[e++];
+    }
+  }
+  buf_p[++i] = '\0';
+}
+
+void s21_gtoa(char buf_p[100], long double num) {
+  char *p_buf;
+  char e_buf[100];
+  if (p.prc == 0) p.prc = 6;
+  int spec = 0, e = 0, int_p = 0, i = 0, j = 0, dec = 0, sign = 0;
+  if (p.spec == 'g')
+    spec = 'e';
+  else if (p.spec == 'G')
+    spec = 'E';
+  int_p = (int)num;
+  p_buf = ecvt(num, p.prc, &dec, &sign);
+  printf("p_buf %s\nDEC %d\nSIGN %d\nINT_P %d\n", p_buf, dec, sign, int_p);
+  if (dec <= 0) {
+    if (sign == 1) {
+      buf_p[i++] = '-';
+    }
+    buf_p[i++] = p_buf[j++];
+    buf_p[i++] = '.';
+    while (p_buf[j]) {
+      buf_p[i++] = p_buf[j++];
+    }
+    if ((dec - 1) <= -BASE) {
+      buf_p[i++] = spec;
+      dec = dec - 1;
+      s21_itoa(dec, BASE, e_buf);
+    } else {
+      buf_p[i++] = spec;
+      buf_p[i++] = '-';
+      buf_p[i++] = '0';
+      dec = -dec + 1;
+      s21_itoa(dec, BASE, e_buf);
+    }
+    while (e_buf[e]) {
+      buf_p[i++] = e_buf[e++];
+    }
+
+  } else {
+    if (sign == 1) {
+      buf_p[i++] = '-';
+    }
+    while (p_buf[j]) {
+      buf_p[i++] = p_buf[j++];
+    }
+    if ((dec + 1) >= BASE) {
+      buf_p[i++] = spec;
+      buf_p[i++] = '+';
+      dec = dec - 1;
+      s21_itoa(dec, BASE, e_buf);
+    } else {
+      buf_p[i++] = spec;
+      buf_p[i++] = '+';
+      buf_p[i++] = '0';
+      dec = dec - 1;
+      s21_itoa(dec, BASE, e_buf);
+    }
+    while (dec--) {
+      buf_p[i++] = e_buf[e++];
+    }
+  }
+  buf_p[++i] = '\0';
+}
 // // int s21_valist(char buf[40]) {
 // //     int symb = va_arg(p.args, int);
 // //     s21_itoa(symb, BASE, buf);
@@ -404,11 +524,17 @@ int s21_sprintff(char *str, const char *format, ...) {
   char buffer[10000] = "";
   char sbuf[10000] = "";
   char dbuf[10000] = "";
+  char fbuf[10000] = "";
+  char ebuf[10000] = "";
+  char Ebuf[10000] = "";
   char *bufs = s21_NULL;
   s21_size_t uspec = 0;
+  double fspec = 0.0;
+  double espec = 0.0;
+  double Espec = 0.0;
   int spec = 0, i = 0, j = 0;
   va_start(p.args, format);
-  int len = 0, len_s = 0;
+  int len = 0, len_s = 0, len_f = 0, len_e = 0;
   do {
     buffer[len] = *format;
     len++;
@@ -463,9 +589,49 @@ int s21_sprintff(char *str, const char *format, ...) {
         j += 1;
         i += 1;
         break;
+      case 'e':
+        p.spec = 'e';
+        espec = va_arg(p.args, double);
+        s21_etoa(ebuf, espec);
+        len_e = s21_swrite(sbuf, ebuf, i);
+        i += len_e;
+        j += 1;
+        break;
+      case 'E':
+        p.spec = 'E';
+        Espec = va_arg(p.args, double);
+        s21_etoa(Ebuf, Espec);
+        len_e = s21_swrite(sbuf, Ebuf, i);
+        i += len_e;
+        j += 1;
+        break;
       case 'f':
         p.spec = 'f';
+        fspec = va_arg(p.args, double);
+        s21_ftoa(fbuf, fspec);
+        len_f = s21_swrite(sbuf, fbuf, i);
+        i += len_f;
+        j += 1;
+        break;
+      case 'g':
+        p.spec = 'g';
+        espec = va_arg(p.args, double);
+        s21_gtoa(ebuf, espec);
+        len_e = s21_swrite(sbuf, ebuf, i);
+        i += len_e;
+        j += 1;
+        break;
+      case 'G':
+        p.spec = 'G';
+        Espec = va_arg(p.args, double);
+        s21_gtoa(Ebuf, Espec);
+        len_e = s21_swrite(sbuf, Ebuf, i);
+        i += len_e;
+        j += 1;
+        break;
+      case '-':
 
+        break;
       default:
         sbuf[i] = buffer[j];
         i += 1;
