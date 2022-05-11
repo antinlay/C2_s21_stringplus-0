@@ -17,7 +17,7 @@ struct s_sprintf {
   int sign;   //  (+ ili -) polozhitel'noe ili otricatel'noe
   int perc;   // % procent
   int align;  // ' ' flag align
-  char spec;  // specificator (d, c, s, i)
+  int spec;   // specificator (d, c, s, i)
 } p;
 
 void s21_zero(char str[40], char format[40], char buf[40], int j, int i);
@@ -35,16 +35,17 @@ int main(void) {
   int num0 = 19;
   int num1 = -149;
   s21_size_t unum0 = 22;
-  double fnum0 = -0.000098645435;
-  double fnum1 = 0.0000000006125361;
+  double fnum0 = 1.000098645435;
+  double fnum1 = 0.000006125361;
   char test = 'W';
   char s[30] = "WAGA669*))";
   char format[1000] =
-      "CHAR %cdeEfgGiopsSuxX%d__\tD_INT: %d__\tI_INT: %i__\tSTR0: "
+      "CHAR %c__\tD_INT: %d__\tI_INT: %i__\tSTR0: "
       "%s__\t SIZE_T: %u__ "
       "%%__[] "
       "%d__"
-      "\tFLOAT: %f__\tEXP_e: %g__\tEXP_E: %E__\tg_exp: %g__\tG_EXP: %G__";
+      "\tFLOAT: %05.f__\tEXP_e: %g__\tEXP_E: %E__\tg_exp: "
+      "%g__\tG_EXP: %G__";
   s21_sprintff(str0, format, test, num0, num1, s, unum0, num0, fnum0, fnum1,
                fnum1, fnum0, fnum0);
   sprintf(str1, format, num0, num0, num1, s, unum0, num0, fnum0, fnum1, fnum1,
@@ -318,6 +319,22 @@ int s21_flag(char *buffer, int j) {
   }
   return j;
 }
+// bezhim ot % k spec (d)
+int s21_wdt(char *buffer, int j) {
+  int digit = 0;
+  int m = j;
+  while (!s21_fspec(buffer, j) && !s21_fspec(buffer, j)) {
+    if (buffer[j] >= '0' && buffer[j] <= '9') {
+      if (buffer[j] == '0' && (m - j) == 0) p.zero == '0';
+      m++;
+      digit += (buffer[j] & 0x0F);
+      digit *= BASE;
+      j++;
+    }
+  }
+  return digit /= BASE;
+}
+
 // // int s21_valist(char buf[40]) {
 // //     int symb = va_arg(p.args, int);
 // //     s21_itoa(symb, BASE, buf);
@@ -579,16 +596,7 @@ int s21_sprintff(char *str, const char *format, ...) {
     }
     j = s21_fspec(buffer, j);
     j = s21_flag(buffer, j);
-    while (buffer[j] == p.spec) {
-      if (buffer[j] >= '0' && buffer[j] <= '9') {
-        digit += (buffer[j] & 0x0F);
-        digit *= BASE;
-      }
-    }
-    if (p.pnt == '.')
-      p.prc = digit;
-    else
-      p.wdt = digit;
+    p.wdt = s21_wdt(buffer, j);
     switch (buffer[++j]) {
       case 'c':
         p.spec = 'c';
