@@ -4,27 +4,20 @@
 #include <string.h>
 
 #include "s21_string.h"
-// #define G 103
-// #define B_G 71
-// #define O 111
-// #define U 117
-// #define X 120
-// #define B_X 88
-// #define P 112
-// #define N 110
 
 struct s_sprintf {
   va_list args;  //  argument dlya zapisi
   int wdt;       //  shirina
   int prc;       //  tochnost'
-  int zero;      //  00123.1
-  int pnt;       //  . tochka
-  int pol;       //  polyarnost'
-  int len;       //  poluchennaya dlina stroki
-  int sign;      //  (+ ili -) polozhitel'noe ili otricatel'noe
-  int perc;      // % procent
-  int align;     // ' ' and '0' flag align
-  char spec;     // specificator (d, c, s, i)
+  int hash;
+  int zero;   //  00123.1
+  int pnt;    //  . tochka
+  int pol;    //  polyarnost'
+  int len;    //  poluchennaya dlina stroki
+  int sign;   //  (+ ili -) polozhitel'noe ili otricatel'noe
+  int perc;   // % procent
+  int align;  // ' ' flag align
+  char spec;  // specificator (d, c, s, i)
 } p;
 
 void s21_zero(char str[40], char format[40], char buf[40], int j, int i);
@@ -34,7 +27,7 @@ int s21_valist(char buf[40]);
 void p_flag(char input_char);
 void parser(char *str, const char *format);
 int s21_sprintff(char *str, const char *format, ...);
-void s21_ftoa(char buf_p[100], long double num);
+void s21_ftoa(char buf_p[1000], long double num);
 
 int main(void) {
   char str0[1000];
@@ -47,20 +40,21 @@ int main(void) {
   char test = 'W';
   char s[30] = "WAGA669*))";
   char format[1000] =
-      "CHAR %+.4.6qd__\tD_INT: %d__\tI_INT: %i__\tSTR0: %s__\tssSIZE_T: %u__ "
+      "CHAR %cdeEfgGiopsSuxX%d__\tD_INT: %d__\tI_INT: %i__\tSTR0: "
+      "%s__\t SIZE_T: %u__ "
       "%%__[] "
       "%d__"
       "\tFLOAT: %f__\tEXP_e: %g__\tEXP_E: %E__\tg_exp: %g__\tG_EXP: %G__";
-  // s21_sprintff(str0, format, test, num0, num1, s, unum0, num0, fnum0, fnum1,
-  //              fnum1, fnum0, fnum0);
+  s21_sprintff(str0, format, test, num0, num1, s, unum0, num0, fnum0, fnum1,
+               fnum1, fnum0, fnum0);
   sprintf(str1, format, num0, num0, num1, s, unum0, num0, fnum0, fnum1, fnum1,
           fnum0, fnum0);
   printf("STR0: %s\nSTR1: %s\n", str0, str1);
-  s21_ftoa(str0, fnum0);
-  printf(
-      "\nSTRUCT:\nwdt = %d\nprc = %d\nzero = %d\npnt = %d\nmin = %d\nlen = "
-      "%d\nsign = %d\nperc = %d\nsp = %d\n",
-      p.wdt, p.prc, p.zero, p.pnt, p.pol, p.len, p.sign, p.perc, p.align);
+  // s21_ftoa(str0, fnum0);
+  // printf(
+  //     "\nSTRUCT:\nwdt = %d\nprc = %d\nzero = %d\npnt = %d\nmin = %d\nlen = "
+  //     "%d\nsign = %d\nperc = %d\nsp = %d\n",
+  //     p.wdt, p.prc, p.zero, p.pnt, p.pol, p.len, p.sign, p.perc, p.align);
   return 0;
 }
 
@@ -102,7 +96,7 @@ int main(void) {
 //     }
 // }
 
-int s21_swrite(char str[40], char buf[40], int i) {
+int s21_swrite(char str[1000], char buf[1000], int i) {
   int k = 0;
   do {
     str[i] = buf[k];
@@ -123,7 +117,7 @@ int s21_atoi(const char *format, int i) {
   return digit;
 }
 
-void s21_ftoa(char buf_p[100], long double num) {
+void s21_ftoa(char buf_p[1000], long double num) {
   char *p_buf;
   if (p.prc == 0) p.prc = 6;
   int pow_num = 0, int_p = 0, i = 0, j = 0, dec = 0;
@@ -164,9 +158,9 @@ void s21_ftoa(char buf_p[100], long double num) {
   p.prc = 0;
 }
 
-void s21_etoa(char buf_p[100], long double num) {
+void s21_etoa(char buf_p[1000], long double num) {
   char *p_buf;
-  char e_buf[100];
+  char e_buf[1000];
   if (p.prc == 0) p.prc = 6;
   if (p.spec == 'E') p.prc = 7;
   int e = 0, int_p = 0, i = 0, j = 0, dec = 0;
@@ -228,9 +222,9 @@ void s21_etoa(char buf_p[100], long double num) {
   p.prc = 0;
 }
 
-void s21_gtoa(char buf_p[100], long double num) {
+void s21_gtoa(char buf_p[1000], long double num) {
   char *p_buf;
-  char e_buf[100];
+  char e_buf[1000];
   if (p.prc == 0) p.prc = 6;
   int spec = 0, e = 0, int_p = 0, i = 0, j = 0, dec = 0;
   if (p.spec == 'g')
@@ -288,6 +282,41 @@ void s21_gtoa(char buf_p[100], long double num) {
   }
   buf_p[++i] = '\0';
   p.prc = 0;
+}
+
+int s21_fspec(char *buffer, int j) {
+  int m = 0;
+  char *slist = "cdeEfgGiopsSuxX%\0";
+  while (p.spec == 0 && slist[m] != '\0') {
+    j++;
+    while (slist[m] != '\0' && p.spec == 0) {
+      if (buffer[j] == slist[m]) {
+        p.spec = slist[m];
+        break;
+      }
+      m++;
+    }
+  }
+  return p.spec != 0 ? j : 0;
+}
+
+int s21_flag(char *buffer, int j) {
+  int m = 0, ok = 0;
+  char *flist = ".0#-+ \0";
+  while (buffer[j] != '%') {
+    while (flist[m] != '\0') {
+      if (buffer[j] == flist[m]) {
+        if (m == 0) p.pnt = flist[m];
+        if (m == 1) p.zero = flist[m];
+        if (m == 2) p.hash = flist[m];
+        if (m == 3 || m == 4) p.pol = flist[m];
+        if (m == 4) p.align = flist[m];
+      }
+      m++;
+    }
+    j--;
+  }
+  return j;
 }
 // // int s21_valist(char buf[40]) {
 // //     int symb = va_arg(p.args, int);
@@ -524,13 +553,13 @@ void s21_gtoa(char buf_p[100], long double num) {
 // }
 
 int s21_sprintff(char *str, const char *format, ...) {
-  char buffer[10000] = "";
-  char sbuf[10000] = "";
-  char dbuf[10000] = "";
-  char fbuf[10000] = "";
-  char ebuf[10000] = "";
-  char Ebuf[10000] = "";
-  char *bufs = s21_NULL;
+  char buffer[10000];
+  char sbuf[100];
+  char dbuf[1000];
+  char fbuf[1000];
+  char ebuf[100];
+  char Ebuf[100];
+  char *bufs;
   s21_size_t uspec = 0;
   double fspec = 0.0;
   double espec = 0.0;
@@ -548,33 +577,18 @@ int s21_sprintff(char *str, const char *format, ...) {
       sbuf[i++] = buffer[j++];
       if (buffer[j] == '\0') break;
     }
-    m = j;
-    while (buffer[m++] != 'd') {
-      if (buffer[m] == '+') {
-        p.pol = '+';
-      }
-      if (buffer[m] == '-') {
-        p.pol = '-';
-      }
-      if (buffer[m] == '.') {
-        p.pnt = '.';
-      }
-      if (buffer[m] == '%') {
-        p.perc = '%';
-      }
-      if (buffer[m] == '0' && p.pol != '-') {
-        p.zero = '0';
-      }
-      if (buffer[m] == ' ' && p.pol != '+') {
-        p.align = ' ';
-      }
-      if (buffer[m] >= '0' && buffer[m] <= '9') {
-        digit += (buffer[m] & 0x0F);
+    j = s21_fspec(buffer, j);
+    j = s21_flag(buffer, j);
+    while (buffer[j] == p.spec) {
+      if (buffer[j] >= '0' && buffer[j] <= '9') {
+        digit += (buffer[j] & 0x0F);
         digit *= BASE;
       }
-      if (p.pnt == '.') p.wdt = digit;
     }
-
+    if (p.pnt == '.')
+      p.prc = digit;
+    else
+      p.wdt = digit;
     switch (buffer[++j]) {
       case 'c':
         p.spec = 'c';
@@ -655,9 +669,9 @@ int s21_sprintff(char *str, const char *format, ...) {
         i += len_e;
         j += 1;
         break;
-      case '-':
+      // case '-':
 
-        break;
+      //   break;
       default:
         sbuf[i++] = buffer[j++];
         break;
