@@ -13,11 +13,12 @@ struct s_sprintf {
   int zero;   //  00123.1
   int pnt;    //  . tochka
   int pol;    //  polyarnost'
-  int len;    //  poluchennaya dlina stroki
+  int dec;    //  poluchennaya dlina int_p
   int sign;   //  (+ ili -) polozhitel'noe ili otricatel'noe
   int perc;   // % procent
   int align;  // ' ' flag align
   int spec;   // specificator (d, c, s, i)
+  int digit;  // polozhenie digit
 } p;
 
 // void s21_zero(char str[40], char format[40], char buf[40], int j, int i);
@@ -45,7 +46,7 @@ int main(void) {
       // "%s__\t SIZE_T: %u__ "
       // "%%__[] "
       // "%d__"
-      "FLOAT: %5.f";
+      "FLOAT: %10f";
   // \tEXP_e: %g__\tEXP_E: %E__\tg_exp: "
   // "%g__\tG_EXP: %G__";
   s21_sprintff(str0, format, fnum0);
@@ -58,8 +59,8 @@ int main(void) {
   // s21_ftoa(str0, fnum0);
   // printf(
   //     "\nSTRUCT:\nwdt = %d\nprc = %d\nzero = %d\npnt = %d\nmin = %d\nlen = "
-  //     "%d\nsign = %d\nperc = %d\nsp = %d\n",
-  //     p.wdt, p.prc, p.zero, p.pnt, p.pol, p.len, p.sign, p.perc, p.align);
+  //     "%d\nsign = %d\nperc = %d\nalign = %d\n",
+  //     p.wdt, p.prc, p.zero, p.pnt, p.pol, p.dec, p.sign, p.perc, p.align);
   return 0;
 }
 
@@ -110,7 +111,7 @@ void s21_struct_init() {
   p.pol = -1;
   p.pnt = -1;
   p.perc = -1;
-  p.len = -1;
+  p.dec = -1;
   p.hash = -1;
   p.align = -1;
 }
@@ -123,6 +124,24 @@ int s21_swrite(char str[1000], char buf[1000], int i) {
     k++;
   } while (buf[k] != '\0');
   return k;
+}
+
+void s21_count_align() {
+  if (p.pnt == -1) {
+    if (p.wdt < 0) {
+      p.prc = 6;
+      p.align = 0;
+    } else
+      p.align = p.wdt - p.dec - p.prc;
+  } else {
+    p.align = p.wdt - p.dec - p.prc;
+    if (p.prc <= 0) {
+      p.prc = 6;
+      if (p.align <= 0) {
+        p.align = 0;
+      }
+    }
+  }
 }
 
 int s21_atoi(const char *format, int i) {
@@ -138,11 +157,17 @@ int s21_atoi(const char *format, int i) {
 
 void s21_ftoa(char buf_p[1000], long double num) {
   char *p_buf;
-  if (p.prc == 0) p.prc = 6;
-  int pow_num = 0, int_p = 0, i = 0, j = 0, dec = 0;
-  int_p = (int)num;
-  p_buf = fcvt(num, p.prc, &dec, &p.sign);
-
+  int pow_num = 0, int_p = (int)num, i = 0, j = 0, dec = 0, prc = 0;
+  if (p.prc <= 0) p.prc = 6;
+  while (int_p) {
+    dec++;
+    int_p /= BASE;
+  }
+  prc = p.prc;
+  p.dec = dec;
+  s21_count_align();
+  p_buf = fcvt(num, prc, &dec, &p.sign);
+  printf("\nDEC %d", dec);
   if (dec <= 0) {
     if (p.sign == 1) {
       buf_p[i++] = '-';
@@ -174,16 +199,14 @@ void s21_ftoa(char buf_p[1000], long double num) {
     } while (p_buf[j++] != '\0');
   }
   buf_p[i] = '\0';
-  p.prc = 0;
 }
 
 void s21_etoa(char buf_p[1000], long double num) {
   char *p_buf;
   char e_buf[1000];
+  int e = 0, i = 0, j = 0, dec = 0;
   if (p.prc == -1) p.prc = 6;
   if (p.spec == 'E') p.prc = 7;
-  int e = 0, int_p = 0, i = 0, j = 0, dec = 0;
-  int_p = (int)num;
   p_buf = ecvt(num, p.prc, &dec, &p.sign);
   if (dec <= 0) {
     if (p.sign == 1) {
@@ -244,13 +267,12 @@ void s21_etoa(char buf_p[1000], long double num) {
 void s21_gtoa(char buf_p[1000], long double num) {
   char *p_buf;
   char e_buf[1000];
+  int spec = 0, e = 0, i = 0, j = 0, dec = 0;
   if (p.prc == 0) p.prc = 6;
-  int spec = 0, e = 0, int_p = 0, i = 0, j = 0, dec = 0;
   if (p.spec == 'g')
     spec = 'e';
   else if (p.spec == 'G')
     spec = 'E';
-  int_p = (int)num;
   p_buf = ecvt(num, p.prc, &dec, &p.sign);
   if (dec <= 0) {
     if (p.sign == 1) {
@@ -324,12 +346,12 @@ int s21_flag(char *buffer, int j) {
   char *flist = ".#-+ ";
   while (buffer[j] != '%' && j > 0) {
     int m = 0;
-    while (buffer[j] != '%' && buffer[j] != '\0' && m < 6) {
+    while (buffer[j] != '%' && buffer[j] != '\0' && m < 5) {
       if (buffer[j] == flist[m]) {
-        if (m == 0) p.pnt = flist[m];
-        if (m == 1) p.hash = flist[m];
+        if (m == 0) p.pnt = j;
+        if (m == 1) p.hash = j;
         if (m == 2 || m == 3) p.pol = flist[m];
-        if (m == 4) p.align = flist[m];
+        if (m == 4) p.align = j;
       }
       m++;
     }
@@ -342,15 +364,29 @@ int s21_flag(char *buffer, int j) {
 // bezhim ot % k spec (d)
 int s21_wdt(char *buffer, int j) {
   int digit = 0;
-  int m = j++;
-  while (buffer[j] >= '0' && buffer[j] <= '9') {
-    if (buffer[j] == '0' && (m - j) == 0) p.zero == '0';
-    m++;
+  while (buffer[j] >= '0' && buffer[j] <= '9' && buffer[j] != '.') {
     digit += (buffer[j] & 0x0F);
     digit *= BASE;
     j++;
   }
-  return digit /= BASE;
+  p.digit = j;
+  digit /= BASE;
+  return digit;
+}
+
+int s21_prc(char *buffer, int j) {
+  int digit = 0;
+  if (p.pnt != -1) {
+    j = p.pnt;
+    while (buffer[j] >= '0' && buffer[j] <= '9') {
+      digit += (buffer[j] & 0x0F);
+      digit *= BASE;
+      j++;
+    }
+    digit /= BASE;
+  }
+  p.digit = j;
+  return digit;
 }
 
 // // int s21_valist(char buf[40]) {
@@ -380,7 +416,7 @@ int s21_wdt(char *buffer, int j) {
 // p.zero = 0;
 // p.pnt = 0;
 // p.pol = 0;
-// p.len = 0;
+// p.dec = 0;
 // p.sign = 0;
 // p.perc = 0;
 // p.align = 0;
@@ -603,6 +639,7 @@ int s21_sprintff(char *str, const char *format, ...) {
   s21_struct_init();
   va_start(p.args, format);
   int len = 0, len_s = 0, len_f = 0, len_e = 0;
+  int j_spec = 0, j_flag = 0, wdt = 0, prc = 0;
   do {
     buffer[len] = *format;
     len++;
@@ -613,9 +650,24 @@ int s21_sprintff(char *str, const char *format, ...) {
       sbuf[i++] = buffer[j++];
       if (buffer[j] == '\0') break;
     }
-    j = s21_fspec(buffer, j);
-    s21_flag(buffer, j);
-    p.wdt = s21_wdt(buffer, j);
+    j_spec = s21_fspec(buffer, j);
+
+    if (j_spec <= 0)
+      ;
+    else
+      j = j_spec;
+
+    j_flag = s21_flag(buffer, j);
+    // if (p.pnt >= 0) {
+    j = j_flag + 1;
+    wdt = s21_wdt(buffer, j);
+    prc = s21_prc(buffer, j);
+    // }
+    // if (p.pnt != -1) {
+    p.wdt = wdt;
+    p.prc = prc;
+    // }
+    j = j_spec;
     switch (buffer[j++]) {
       case 'c':
         p.spec = 'c';
@@ -679,6 +731,7 @@ int s21_sprintff(char *str, const char *format, ...) {
         len_f = s21_swrite(sbuf, fbuf, i);
         i += len_f;
         j += 1;
+        s21_struct_init();
         break;
       case 'g':
         p.spec = 'g';
