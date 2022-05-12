@@ -1,35 +1,31 @@
 
-BPATH=../materials/build/
 CC=gcc
 CFLAGS=-std=c11 -Wall -Werror -Wextra -g
 SOURCES=s21_itoa.c s21_strcpy.c s21_memset.c s21_strlen.c s21_memcpy.c s21_strcspn.c s21_strncpy.c s21_strrchr.c s21_strerror.c s21_memchr.c s21_memcmp.c s21_memmove.c s21_strncat.c s21_strcmp.c s21_strncmp.c s21_strpbrk.c s21_strcat.c s21_strchr.c s21_strstr.c s21_strspn.c s21_strtok.c s21_insert.c s21_trim.c s21_to_upper.c s21_to_lower.c s21_sprintf.c
 OBJECTS=$(SOURCES:.c=.o)
-PFLAGS=-fprofile-arcs -ftest-coverage
-GCOVFLAGS=--coverage
+GCOVFLAGS=-L. -ls21_string --coverage
 LCOVPATH=../datasets/lcov/1.15/libexec/bin/
 HTML=$(LCOVPATH)lcov -t "test" -o rep.info -c -d .; $(LCOVPATH)genhtml -o report rep.info
-OS := $(shell uname)
+OS = $(shell uname)
 
 ifeq ($(OS), Darwin)
 	CHECK_H=-lcheck
 else
-	CHECK_H=-lcheck -lsubunit -lm -lrt -lpthread -D_GNU_SOURCE
+	CHECK_H=-lcheck
 endif
 
 all: gcov_report
 
-s21_string.a: clean
-	$(CC) $(CFLAGS) -c $(PFLAGS) $(SOURCES)
-	ar rcs s21_string.a $(OBJECTS)
-	ranlib s21_string.a
-# checkmk clean_mode=1 asd.check > string_test.c
+s21_string.a: clean $(OBJECTS)
+	ar rcs libs21_string.a $(OBJECTS)
+
 test: s21_string.a
-	$(CC) $(CFLAGS) $(GCOVFLAGS) $(PFLAGS) s21_string_test.c s21_string.a $(SOURCES) -o $(BPATH)test $(CHECK_H)
-	$(BPATH)test # DELETE BEFORE FINISH PROJECT
+	$(CC) $(CFLAGS) s21_string_test.c $(SOURCES) -o test $(CHECK_H) $(GCOVFLAGS)
+	./test
 
 gcov_report: test
 	$(HTML)
-	open ./report/index.html # DELETE BEFORE FINISH PROJECT
+	open ./report/index.html
 
 clean:
-	rm -rf *.o *.a *.so *.gcda *.gcno *.gch rep.info *.html *.css $(BPATH)test report
+	rm -rf *.o *.a *.so *.gcda *.gcno *.gch rep.info *.html *.css test report
