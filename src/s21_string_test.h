@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef _S21_STIRNG_TEST_H_
-#define _S21_STIRNG_TEST_H_
+#ifndef SRC_S21_STRING_TEST_H_
+#define SRC_S21_STRING_TEST_H_
 
 char s1[40] = "Hello world\0";
 char s2[40] = "Hello world\n\0";
@@ -24,4 +24,4 @@ char s16[15] = "/0000/12345";
 char s17[15] = "Hello world\0";
 char *s18 = NULL;
 
-#endif
+#endif  // SRC_S21_STRING_TEST_H_

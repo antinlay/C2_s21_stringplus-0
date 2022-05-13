@@ -29,12 +29,12 @@ gcov_report: test
 
 check:
 	cppcheck --enable=all --suppress=missingIncludeSystem $(SOURCES)
-	python3 ../materials/linters/cpplint.py --extentions=c $(SOURCES)
+	python3 ../materials/linters/cpplint.py --extensions=c $(SOURCES)
 	make test
 ifeq ($(OS), Darwin)
-	leaks --atExit -- ./test
+	leaks --atExit -- test
 else
-	valgrind ./test --leak-check=full
+	valgrind test --leak-check=full
 endif
 
 clean:

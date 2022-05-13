@@ -1,7 +1,7 @@
 #include "s21_string.h"
 
 char *s21_convert(unsigned int num, int base) {
-  static char Representation[] = "0123456789ABCDEF";
+  const char Representation[] = "0123456789ABCDEF";
   static char buffer[50];
   char *ptr;
   ptr = &buffer[49];

@@ -4,8 +4,8 @@
 // #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef _S21_STRING_H_
-#define _S21_STRING_H_
+#ifndef SRC_S21_STRING_H_
+#define SRC_S21_STRING_H_
 
 #define s21_NULL ((void*)0)
 typedef long unsigned s21_size_t;
@@ -204,4 +204,4 @@ int pwrite_int_unsign(char* str, int* j, va_list* string);
 int pwrite_float(char* str, int* j, va_list* string);
 int read_sprintf(char* str, int* j, va_list* string, int counter);
 
-#endif
+#endif  // SRC_S21_STRING_H_
