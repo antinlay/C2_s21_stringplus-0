@@ -205,27 +205,54 @@ START_TEST(s21_strncat_test) {
 END_TEST
 
 START_TEST(s21_strcmp_test) {
-  ck_assert_int_ne(s21_strcmp(s1, s8), 0);
-  ck_assert_int_ne(strcmp(s1, s8), 0);
-  ck_assert_int_eq(s21_strcmp(s2, cs2), strcmp(s2, cs2));
-  ck_assert_int_eq(s21_strcmp(s3, cs3), strcmp(s3, cs3));
-  ck_assert_int_eq(s21_strcmp(s4, cs4), strcmp(s4, cs4));
-  ck_assert_int_eq(s21_strcmp(s5, cs5), strcmp(s5, cs5));
-  ck_assert_int_eq(s21_strcmp(s6, cs6), strcmp(s6, cs6));
-  ck_assert_int_eq(s21_strcmp(s7, cs7), strcmp(s7, cs7));
+  ck_assert_int_eq(s21_strcmp(s1, s8), 0);
+  ck_assert_int_eq(strcmp(s1, s8), 0);
+  ck_assert_int_eq(s21_strcmp(s2, cs2), 0);
+  ck_assert_int_eq(strcmp(s2, cs2), 0);
+  ck_assert_int_eq(s21_strcmp(s3, cs3), 0);
+  ck_assert_int_eq(strcmp(s3, cs3), 0);
+  ck_assert_int_eq(s21_strcmp(s4, cs4), 0);
+  ck_assert_int_eq(strcmp(s4, cs4), 0);
+  ck_assert_int_eq(s21_strcmp(s5, cs5), 0);
+  ck_assert_int_eq(strcmp(s5, cs5), 0);
+  ck_assert_int_eq(s21_strcmp(s6, cs6), 0);
+  ck_assert_int_eq(strcmp(s6, cs6), 0);
+  ck_assert_int_eq(s21_strcmp(s7, cs7), 0);
+  ck_assert_int_eq(strcmp(s7, cs7), 0);
+  // ck_assert_int_eq(s21_strcmp(s2, cs2), strcmp(s2, cs2));
+  // ck_assert_int_eq(s21_strcmp(s3, cs3), strcmp(s3, cs3));
+  // ck_assert_int_eq(s21_strcmp(s4, cs4), strcmp(s4, cs4));
+  // ck_assert_int_eq(s21_strcmp(s5, cs5), strcmp(s5, cs5));
+  // ck_assert_int_eq(s21_strcmp(s6, cs6), strcmp(s6, cs6));
+  // ck_assert_int_eq(s21_strcmp(s7, cs7), strcmp(s7, cs7));
 }
 END_TEST
 
 START_TEST(s21_strncmp_test) {
   ck_assert_int_ne(s21_strncmp(s1, s9, 3), 0);
   ck_assert_int_ne(strncmp(s1, s9, 3), 0);
-  ck_assert_int_eq(s21_strncmp(s1, s8, 2), strncmp(s1, s8, 2));
-  ck_assert_int_eq(s21_strncmp(s8, s1, 2), strncmp(s8, s1, 2));
-  ck_assert_int_eq(s21_strncmp(s1, s8, 8), strncmp(s1, s8, 8));
-  ck_assert_int_eq(s21_strncmp(s1, s2, 8), strncmp(s1, s2, 8));
-  ck_assert_int_eq(s21_strncmp(s3, s4, 1), strncmp(s3, s4, 1));
-  ck_assert_int_eq(s21_strncmp(s5, s6, 1), strncmp(s5, s6, 1));
-  ck_assert_int_eq(s21_strncmp(s6, s7, 1), strncmp(s6, s7, 1));
+  ck_assert_int_eq(s21_strncmp(s1, s8, 2), 0);
+  ck_assert_int_eq(strncmp(s1, s8, 2), 0);
+  ck_assert_int_eq(s21_strncmp(s8, s1, 2), 0);
+  ck_assert_int_eq(strncmp(s8, s1, 2), 0);
+  ck_assert_int_eq(s21_strncmp(s1, s8, 8), 0);
+  ck_assert_int_eq(strncmp(s1, s8, 8), 0);
+  ck_assert_int_eq(s21_strncmp(s1, s2, 8), 0);
+  ck_assert_int_eq(strncmp(s1, s2, 8), 0);
+  ck_assert_int_ne(s21_strncmp(s3, s4, 1), 0);
+  ck_assert_int_ne(strncmp(s3, s4, 1), 0);
+  ck_assert_int_ne(s21_strncmp(s5, s6, 1), 0);
+  ck_assert_int_ne(strncmp(s5, s6, 1), 0);
+  ck_assert_int_ne(s21_strncmp(s6, s7, 1), 0);
+  ck_assert_int_ne(strncmp(s6, s7, 1), 0);
+
+  // ck_assert_int_eq(s21_strncmp(s1, s8, 2), strncmp(s1, s8, 2));
+  // ck_assert_int_eq(s21_strncmp(s8, s1, 2), strncmp(s8, s1, 2));
+  // ck_assert_int_eq(s21_strncmp(s1, s8, 8), strncmp(s1, s8, 8));
+  // ck_assert_int_eq(s21_strncmp(s1, s2, 8), strncmp(s1, s2, 8));
+  // ck_assert_int_eq(s21_strncmp(s3, s4, 1), strncmp(s3, s4, 1));
+  // ck_assert_int_eq(s21_strncmp(s5, s6, 1), strncmp(s5, s6, 1));
+  // ck_assert_int_eq(s21_strncmp(s6, s7, 1), strncmp(s6, s7, 1));
 }
 END_TEST
 
@@ -253,7 +280,7 @@ END_TEST
 START_TEST(s21_strchr_test) {
   ck_assert_str_eq(s21_strchr(s1, 'o'), strchr(s1, 'o'));
   ck_assert_pstr_eq(s21_strchr(s2, 'o'), strchr(s2, 'o'));
-  ck_assert_str_eq(s21_strchr(s3, 'a'), strchr(s3, 'a'));
+  ck_assert_pstr_eq(s21_strchr(s3, 'a'), strchr(s3, 'a'));
   ck_assert_pstr_eq(s21_strchr(s4, 'n'), strchr(s4, 'n'));
   ck_assert_str_eq(s21_strchr(s5, ' '), strchr(s5, ' '));
   ck_assert_str_eq(s21_strchr(s6, '\0'), strchr(s6, '\0'));
@@ -284,14 +311,55 @@ START_TEST(s21_strspn_test) {
 END_TEST
 
 START_TEST(s21_strtok_test) {
-  ck_assert_str_eq(s21_strtok(s1, s14), strtok(s17, s14));
-  ck_assert_pstr_eq(s21_strtok(s8, s7), strtok(s8, s7));
-  ck_assert_str_eq(s21_strtok(s8, s10), strtok(s8, s10));
-  ck_assert_str_eq(s21_strtok(s6, s7), strtok(s6, s7));
-  ck_assert_str_eq(s21_strtok(s8, s9), strtok(s8, s9));
-  ck_assert_pstr_eq(s21_strtok(s10, s14), strtok(s10, s14));
-  ck_assert_str_eq(s21_strtok(s9, s14), strtok(s9, s14));
-  ck_assert_str_eq(s21_strtok(s15, s14), strtok(s16, s14));
+  char dest[] = "Hell0 world\0";
+  char orig[] = "Hell0 world\0";
+  ck_assert_str_eq(s21_strtok(dest, " "), strtok(orig, " "));
+  char dest2[] = "Hell0 world\n\0";
+  char orig2[] = "Hell0 world\n\0";
+  ck_assert_str_eq(s21_strtok(dest2, " "), strtok(orig2, " "));
+  char dest3[] = "a\n\0";
+  char orig3[] = "a\n\0";
+  ck_assert_str_eq(s21_strtok(dest3, " "), strtok(orig3, " "));
+  char dest4[] = " s\0";
+  char orig4[] = " s\0";
+  ck_assert_str_eq(s21_strtok(dest4, " "), strtok(orig4, " "));
+  char dest5[] = " \0";
+  char orig5[] = " \0";
+  ck_assert_ptr_eq(s21_strtok(dest5, " "), strtok(orig5, " "));
+  char dest6[] = "\n\0";
+  char orig6[] = "\n\0";
+  ck_assert_str_eq(s21_strtok(dest6, " "), strtok(orig6, " "));
+  char dest7[] = "\0";
+  char orig7[] = "\0";
+  ck_assert_ptr_eq(s21_strtok(dest7, " "), strtok(orig7, " "));
+  char dest8[] = "test1/test2/test3/test4";
+  char orig8[] = "test1/test2/test3/test4";
+  ck_assert_str_eq(s21_strtok(dest8, "/"), strtok(orig8, "/"));
+  ck_assert_str_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+  ck_assert_str_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+  ck_assert_str_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+  ck_assert_ptr_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+  char dest9[] = "test1/test2/test3///";
+  char orig9[] = "test1/test2/test3///";
+  ck_assert_str_eq(s21_strtok(dest9, "/"), strtok(orig9, "/"));
+  ck_assert_str_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+  ck_assert_str_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+  ck_assert_ptr_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+  char dest10[] = "///test1///test2/test3/";
+  char orig10[] = "///test1///test2/test3/";
+  ck_assert_str_eq(s21_strtok(dest10, "/"), strtok(orig10, "/"));
+  ck_assert_str_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+  ck_assert_str_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+  ck_assert_ptr_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
+
+  // ck_assert_str_eq(s21_strtok(s1, s14), strtok(s17, s14));
+  // ck_assert_pstr_eq(s21_strtok(s8, s7), strtok(s8, s7));
+  // ck_assert_str_eq(s21_strtok(s8, s10), strtok(s8, s10));
+  // ck_assert_str_eq(s21_strtok(s6, s7), strtok(s6, s7));
+  // ck_assert_str_eq(s21_strtok(s8, s9), strtok(s8, s9));
+  // ck_assert_pstr_eq(s21_strtok(s10, s14), strtok(s10, s14));
+  // ck_assert_str_eq(s21_strtok(s9, s14), strtok(s9, s14));
+  // ck_assert_str_eq(s21_strtok(s15, s14), strtok(s16, s14));
 }
 END_TEST
 
