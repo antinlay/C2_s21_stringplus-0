@@ -1,5 +1,4 @@
 #include "s21_string.h"
-
 #include "s21_string_test.h"
 
 START_TEST(s21_sprintf_test) {
@@ -173,7 +172,7 @@ START_TEST(s21_memchr_test) {
 END_TEST
 
 START_TEST(s21_memcmp_test) {
-  ck_assert_int_eq(s21_memcmp(s1, s2, 5), memcmp(s1, s1, 5));
+  ck_assert_int_eq(s21_memcmp(s1, s2, 5), memcmp(s1, s2, 5));
   ck_assert_int_lt(s21_memcmp(s2, s3, 5), 0);
   ck_assert_int_lt(memcmp(s2, s3, 5), 0);
   ck_assert_int_eq(s21_memcmp(s3, s4, 1), memcmp(s3, s4, 1));
@@ -206,12 +205,12 @@ END_TEST
 
 START_TEST(s21_strcmp_test) {
   ck_assert_int_eq(s21_strcmp(s1, s8), strcmp(s1, s8));
-  ck_assert_int_eq(s21_strcmp(s2, s2), strcmp(s2, s2));
-  ck_assert_int_eq(s21_strcmp(s3, s3), strcmp(s3, s3));
-  ck_assert_int_eq(s21_strcmp(s4, s4), strcmp(s4, s4));
-  ck_assert_int_eq(s21_strcmp(s5, s5), strcmp(s5, s5));
-  ck_assert_int_eq(s21_strcmp(s6, s6), strcmp(s6, s6));
-  ck_assert_int_eq(s21_strcmp(s7, s7), strcmp(s7, s7));
+  ck_assert_int_eq(s21_strcmp(s2, cs2), strcmp(s2, cs2));
+  ck_assert_int_eq(s21_strcmp(s3, cs3), strcmp(s3, cs3));
+  ck_assert_int_eq(s21_strcmp(s4, cs4), strcmp(s4, cs4));
+  ck_assert_int_eq(s21_strcmp(s5, cs5), strcmp(s5, cs5));
+  ck_assert_int_eq(s21_strcmp(s6, cs6), strcmp(s6, cs6));
+  ck_assert_int_eq(s21_strcmp(s7, cs7), strcmp(s7, cs7));
 }
 END_TEST
 

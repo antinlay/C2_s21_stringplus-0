@@ -28,14 +28,14 @@ gcov_report: test
 	open ./report/index.html
 
 check:
-	cppcheck --enable=all --suppress=missingIncludeSystem $(SOURCES)
-	python3 ../materials/linters/cpplint.py --extensions=c $(SOURCES)
+	cppcheck --enable=all --suppress=missingIncludeSystem --inconclusive --check-config $(SOURCES) *.h
+	python3 ../materials/linters/cpplint.py --extensions=c $(SOURCES) *.h
 	make test
 ifeq ($(OS), Darwin)
 	leaks --atExit -- test
 else
-	valgrind test --leak-check=full
+	CK_FORK=no valgrind --vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=RESULT_VALGRIND.txt test
 endif
 
 clean:
-	rm -rf *.o *.a *.so *.gcda *.gcno *.gch rep.info *.html *.css test report
+	rm -rf *.o *.a *.so *.gcda *.gcno *.gch rep.info *.html *.css test report *.txt
