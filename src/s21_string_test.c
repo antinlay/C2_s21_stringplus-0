@@ -33,17 +33,51 @@ START_TEST(s21_sprintf_test) {
 END_TEST
 
 START_TEST(s21_insert_test) {
-  char src1[30] = "He Wollorld&llo\0";
-  char trim_chars1[6] = "llo\0";
-  char *src2 = s21_NULL;
-  void *out1, *out2, *out3;
+  char dest[] = "Hello\0";
+  char insert[] = "Man\0";
+  char *test01 = s21_insert(dest, insert, 2);
+  ck_assert_str_eq(test01, "HeManllo\0");
+  free(test01);
+  char dest2[] = "Hello\n\0";
+  char insert2[] = "Man\n\0";
+  char *test02 = s21_insert(dest2, insert2, 1);
+  ck_assert_str_eq(test02, "HMan\nello\n\0");
+  free(test02);
+  char dest3[] = "a\0";
+  char insert3[] = "man\0";
+  char *test03 = s21_insert(dest3, insert3, 1);
+  ck_assert_str_eq(test03, "aman");
+  free(test03);
+  char dest4[] = " s\0";
+  char insert4[] = " s\0";
+  char *test04 = s21_insert(dest4, insert4, 1);
+  ck_assert_str_eq(test04, "  ss");
+  free(test04);
+  char dest5[100] = "\n\0";
+  char insert5[100] = "\n\0";
+  char *test05 = s21_insert(dest5, insert5, 1);
+  ck_assert_str_eq(test05, "\n\n");
+  free(test05);
+  char dest6[] = " \0";
+  char insert6[] = " \0";
+  char *test06 = s21_insert(dest6, insert6, 1);
+  ck_assert_str_eq(test06, "  ");
+  free(test06);
+  char dest7[] = "\0";
+  char insert7[] = "\0";
+  char *test07 = s21_insert(dest7, insert7, 1);
+  ck_assert_ptr_eq(test07, s21_NULL);
+  // char src1[30] = "He Wollorld&llo\0";
+  // char trim_chars1[6] = "llo\0";
+  // char *src2 = s21_NULL;
+  // void *out1, *out2, *out3;
 
-  out1 = s21_insert(src1, trim_chars1, 2);
-  ck_assert_str_eq(out1, "Hello Wollorld&llo\0");
-  out2 = s21_insert(src2, trim_chars1, 2);
-  ck_assert_ptr_eq(out2, s18);
-  out3 = s21_insert(src1, trim_chars1, 100);
-  ck_assert_ptr_eq(out3, s21_NULL);
+  // out1 = s21_insert(src1, trim_chars1, 2);
+  // ck_assert_str_eq(out1, "Hello Wollorld&llo\0");
+  // out2 = s21_insert(src2, trim_chars1, 2);
+  // ck_assert_ptr_eq(out2, s18);
+  // out3 = s21_insert(src1, trim_chars1, 100);
+  // ck_assert_ptr_eq(out3, s21_NULL);
 }
 END_TEST
 
