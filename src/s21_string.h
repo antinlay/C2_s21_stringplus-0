@@ -1,7 +1,5 @@
-// #include <errno.h>
 #include <stdarg.h>
 #include <stddef.h>
-// #include <stdio.h>
 #include <stdlib.h>
 
 #ifndef SRC_S21_STRING_H_
@@ -163,7 +161,7 @@ void* s21_trim(const char* src, const char* trim_chars);
 // additition functions:
 void s21_itoa(int n, int base, char* buf);
 
-// s21_printf functions:
+// s21_sprintf functions:
 int s21_sprintf(char* str, const char* format, ...);
 int numb(const char* str);
 int length(const char* str);

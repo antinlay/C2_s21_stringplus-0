@@ -1,5 +1,4 @@
 #include "s21_string.h"
-// #include <stdlib.h>
 
 void *s21_to_lower(const char *str) {
     int len = s21_strlen(str);

@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "s21_string.h"
-// #include <stdlib.h>
 
 #ifndef SRC_S21_STRING_TEST_H_
 #define SRC_S21_STRING_TEST_H_

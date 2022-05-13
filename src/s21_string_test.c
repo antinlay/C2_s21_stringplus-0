@@ -1,34 +1,8 @@
 #include "s21_string.h"
-
 #include "s21_string_test.h"
 
 START_TEST(s21_sprintf_test) {
-  // char c1[999] = "";
-  // char c2[999] = "";
-  // char *str_pf = "%-c%c%+d%-.d%i%e%E%f%g%%%-16.5o%+016.5o%s%u%x%X%.6f";
-  // char r[100];
-  // int st_x = 110;
-  // s21_sprintf(c1, str_pf, '8', '#', 6, 11, 100, 0.001, 0.111,
-  // 0.000999, 1.12354,
-  //             1111001, 1111001, "Hello\0", 99, 16.16, 64, 10, 11.3);
-  // sprintf(c2, str_pf, '8', '#', 6, 11, 100, 0.001, 0.111, 0.000999, 1.12353,
-  //         1111001, 1111001, "Hello\0", 99, 16.16, 64, 10, 11.3);
-  // ck_assert_str_eq(c1, c2);
-  // ck_assert_int_eq(s21_sprintf(r, "%x", st_x), sprintf(r, "%x", st_x));
-  // ck_assert_int_eq(s21_sprintf(r, "%16.5x", st_x), sprintf(r, "%16.5x",
-  // st_x));
-  // // ck_assert_int_ne(s21_sprintf(r, "%+16.5x", st_x), sprintf(r, "%+16.5x",
-  // // st_x));
-  // ck_assert_int_eq(s21_sprintf(r, "%-16.5x", st_x),
-  //                  sprintf(r, "%-16.5x", st_x));
-  // // ck_assert_int_ne(s21_sprintf(r, "%016.5x", st_x), sprintf(r, "%016.5x",
-  // // st_x)); ck_assert_int_ne(s21_sprintf(r, "% 16.5x", st_x), sprintf(r,
-  // // "% 16.5x", st_x));
-  // ck_assert_int_eq(s21_sprintf(r, "%#16.5x", st_x),
-  //                  sprintf(r, "%#16.5x", st_x));
-  // int n28 = 0;
-  // ck_assert_int_eq(s21_sprintf(r, "%n"), sprintf(r, "%n", &n28));
-  // ck_assert_int_eq(s21_sprintf(r, "%%"), sprintf(r, "%%"));
+
 }
 END_TEST
 
@@ -67,17 +41,7 @@ START_TEST(s21_insert_test) {
   char insert7[] = "\0";
   char *test07 = s21_insert(dest7, insert7, 1);
   ck_assert_ptr_eq(test07, s21_NULL);
-  // char src1[30] = "He Wollorld&llo\0";
-  // char trim_chars1[6] = "llo\0";
-  // char *src2 = s21_NULL;
-  // void *out1, *out2, *out3;
 
-  // out1 = s21_insert(src1, trim_chars1, 2);
-  // ck_assert_str_eq(out1, "Hello Wollorld&llo\0");
-  // out2 = s21_insert(src2, trim_chars1, 2);
-  // ck_assert_ptr_eq(out2, s18);
-  // out3 = s21_insert(src1, trim_chars1, 100);
-  // ck_assert_ptr_eq(out3, s21_NULL);
 }
 END_TEST
 
@@ -88,7 +52,6 @@ START_TEST(s21_trim_test) {
   void *out2;
   out2 = s21_trim(src2, trim_chars2);
   ck_assert_str_eq(out2, res);
-  // free(out);
 }
 END_TEST
 
@@ -96,8 +59,6 @@ START_TEST(s21_to_upper_test) {
   char *str_u = "aZi13E1";
   char *out4 = "AZI13E1";
   ck_assert_str_eq(s21_to_upper(str_u), out4);
-
-  // free(out1);
 }
 END_TEST
 
@@ -105,7 +66,6 @@ START_TEST(s21_to_lower_test) {
   char *str_l = "AZI13E1";
   char *out6 = "azi13e1";
   ck_assert_str_eq(s21_to_lower(str_l), out6);
-  // free(out1);
 }
 END_TEST
 
@@ -253,13 +213,6 @@ START_TEST(s21_strcmp_test) {
   ck_assert_int_ne(strcmp(s6, s9), 0);
   ck_assert_int_ne(s21_strcmp(s7, s9), 0);
   ck_assert_int_ne(strcmp(s7, s9), 0);
-  // ck_assert_int_eq(s21_strcmp(s1, s9), strcmp(s1, s9));
-  // ck_assert_int_eq(s21_strcmp(s2, s9), strcmp(s2, s9));
-  // ck_assert_int_eq(s21_strcmp(s3, s9), strcmp(s3, s9));
-  // ck_assert_int_eq(s21_strcmp(s4, s9), strcmp(s4, s9));
-  // ck_assert_int_eq(s21_strcmp(s5, s9), strcmp(s5, s9));
-  // ck_assert_int_eq(s21_strcmp(s6, s9), strcmp(s6, s9));
-  // ck_assert_int_eq(s21_strcmp(s7, s9), strcmp(s7, s9));
 }
 END_TEST
 
@@ -278,16 +231,6 @@ START_TEST(s21_strncmp_test) {
   ck_assert_int_ne(strncmp(s6, s9, 1), 0);
   ck_assert_int_ne(s21_strncmp(s7, s9, 1), 0);
   ck_assert_int_ne(strncmp(s7, s9, 1), 0);
-  // ck_assert_int_ne(s21_strncmp(s8, s9, 1), 0);
-  // ck_assert_int_ne(strncmp(s6, s9, 1), 0);
-
-  // ck_assert_int_ne(s21_strncmp(s1, s9, 2), strncmp(s1, s9, 2));
-  // ck_assert_int_ne(s21_strncmp(s2, s9, 2), strncmp(s2, s9, 2));
-  // ck_assert_int_ne(s21_strncmp(s3, s9, 8), strncmp(s3, s9, 8));
-  // ck_assert_int_ne(s21_strncmp(s4, s9, 8), strncmp(s4, s9, 8));
-  // ck_assert_int_ne(s21_strncmp(s5, s9, 1), strncmp(s5, s9, 1));
-  // ck_assert_int_ne(s21_strncmp(s6, s9, 1), strncmp(s6, s9, 1));
-  // ck_assert_int_ne(s21_strncmp(s7, s9, 1), strncmp(s7, s9, 1));
 }
 END_TEST
 
@@ -386,15 +329,6 @@ START_TEST(s21_strtok_test) {
   ck_assert_str_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
   ck_assert_str_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
   ck_assert_ptr_eq(s21_strtok(NULL, "/"), strtok(NULL, "/"));
-
-  // ck_assert_str_eq(s21_strtok(s1, s14), strtok(s17, s14));
-  // ck_assert_pstr_eq(s21_strtok(s8, s7), strtok(s8, s7));
-  // ck_assert_str_eq(s21_strtok(s8, s10), strtok(s8, s10));
-  // ck_assert_str_eq(s21_strtok(s6, s7), strtok(s6, s7));
-  // ck_assert_str_eq(s21_strtok(s8, s9), strtok(s8, s9));
-  // ck_assert_pstr_eq(s21_strtok(s10, s14), strtok(s10, s14));
-  // ck_assert_str_eq(s21_strtok(s9, s14), strtok(s9, s14));
-  // ck_assert_str_eq(s21_strtok(s15, s14), strtok(s16, s14));
 }
 END_TEST
 
