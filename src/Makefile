@@ -10,7 +10,7 @@ OS = $(shell uname)
 ifeq ($(OS), Darwin)
 	CHECK_H=-lcheck
 else
-	CHECK_H=-lcheck
+	CHECK_H=-lcheck -pthread -lrt -lm
 endif
 
 all: gcov_report

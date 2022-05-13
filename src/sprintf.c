@@ -36,7 +36,7 @@ int main(void) {
   int num0 = 19;
   int num1 = -149;
   s21_size_t unum0 = 22;
-  double fnum0 = -15.11143763983639879378663978432;
+  double fnum0 = -15.1911143763983639879378663978432;
   double fnum1 = 0.000006125361;
   char test = 'W';
   char s[30] = "WAGA669*))";
@@ -45,7 +45,7 @@ int main(void) {
       // "%s__\t SIZE_T: %u__ "
       // "%%__[] "
       // "%d__"
-      "FLOAT: %4.flkjlk";
+      "FLOAT: %10.f RAS DVA";
   // \tEXP_e: %g__\tEXP_E: %E__\tg_exp: "
   // "%g__\tG_EXP: %G__";
   s21_sprintff(str0, format, fnum0);
@@ -113,6 +113,7 @@ void s21_struct_init() {
   p.dec = -1;
   p.hash = -1;
   p.align = -1;
+  p.digit = -1;
 }
 
 int s21_swrite(char str[1000], char buf[1000], int i) {
@@ -126,7 +127,7 @@ int s21_swrite(char str[1000], char buf[1000], int i) {
   return k;
 }
 
-void s21_count_align(int num) {
+void s21_count_align(int num, int count) {
   if (p.pnt == -1) {
     if (p.prc <= 0) {
       p.prc = 6;
@@ -139,7 +140,10 @@ void s21_count_align(int num) {
       p.align = 0;
     } else
       p.align = p.wdt - p.dec - p.prc - 2;
-  } else {
+  }
+  // else if (p.pnt != -1 && p.prc == 0) {
+  // }
+  else {
     // if (num < 1 && num >= 0) p.align = p.wdt - p.dec - p.prc - 1;
     // if (num >= 1) p.align = p.wdt - p.dec - p.prc - 2;
     // if (num > -1 && num < 0) p.align = p.wdt - p.dec - p.prc - 3;
@@ -167,21 +171,39 @@ int s21_atoi(const char *format, int i) {
   return digit;
 }
 
-void s21_ftoa(char buf_p[1000], long double num) {
-  char *p_buf;
-  int pow_num = 0, int_p = (int)num, i = 0, j = 0, dec = 0;
+int s21_int_count(int num) {
+  int dec = 0, int_p = (int)num;
   while (int_p) {
     dec++;
     int_p /= BASE;
   }
-  p.dec = dec;
-  s21_count_align((int)num);
+  return dec;
+}
+
+int s21_symb_align(char *buf_p) {
+  int i = 0;
   if (p.align > 0) {
     s21_size_t symb = ' ';
     if (p.zero > 0) symb = '0';
     s21_memset(buf_p, symb, p.align);
     i += p.align;
   }
+  return i;
+}
+
+char *s21_sel_cvt(int num, int prc, int *dec, int *sign) {
+  if (p.prc == 0 && p.pnt > -1) {
+    ecvt(num, prc, dec, sign);
+  }
+}
+
+void s21_ftoa(char buf_p[1000], long double num) {
+  char *p_buf;
+  int pow_num = 0, count = 0, i = 0, j = 0, dec = 0;
+  count = s21_int_count(num);
+  p.dec = count;
+  s21_count_align((int)num, count);
+  i = s21_symb_align(buf_p);
   p_buf = fcvt(num, p.prc, &dec, &p.sign);
   printf("\nDEC %d", dec);
   if (dec <= 0) {
@@ -387,7 +409,7 @@ int s21_wdt(char *buffer, int j) {
     digit *= BASE;
     j++;
   }
-  p.digit = j;
+  // p.digit = j;
   digit /= BASE;
   return digit;
 }
@@ -403,7 +425,7 @@ int s21_prc(char *buffer, int j) {
     }
     digit /= BASE;
   }
-  p.digit = j;
+  // p.digit = j;
   return digit;
 }
 
