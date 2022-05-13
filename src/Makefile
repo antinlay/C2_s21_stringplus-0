@@ -27,5 +27,15 @@ gcov_report: test
 	genhtml -o report rep.info
 	open ./report/index.html
 
+check:
+	cppcheck --enable=all --suppress=missingIncludeSystem $(SOURCES)
+	python3 ../materials/linters/cpplint.py --extentions=c $(SOURCES)
+	make test
+ifeq ($(OS), Darwin)
+	leaks --atExit -- ./test
+else
+	valgrind ./test --leak-check=full
+endif
+
 clean:
 	rm -rf *.o *.a *.so *.gcda *.gcno *.gch rep.info *.html *.css test report

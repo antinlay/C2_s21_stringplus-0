@@ -1,7 +1,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "s21_string.h"
 
@@ -46,7 +45,7 @@ int main(void) {
       // "%s__\t SIZE_T: %u__ "
       // "%%__[] "
       // "%d__"
-      "FLOAT: %1.flkjlk";
+      "FLOAT: %4.flkjlk";
   // \tEXP_e: %g__\tEXP_E: %E__\tg_exp: "
   // "%g__\tG_EXP: %G__";
   s21_sprintff(str0, format, fnum0);
@@ -171,12 +170,10 @@ int s21_atoi(const char *format, int i) {
 void s21_ftoa(char buf_p[1000], long double num) {
   char *p_buf;
   int pow_num = 0, int_p = (int)num, i = 0, j = 0, dec = 0;
-  // if (p.prc <= 0) p.prc = 6;
   while (int_p) {
     dec++;
     int_p /= BASE;
   }
-  // prc = p.prc;
   p.dec = dec;
   s21_count_align((int)num);
   if (p.align > 0) {
