@@ -232,20 +232,20 @@ END_TEST
 START_TEST(s21_strncmp_test) {
   ck_assert_int_ne(s21_strncmp(s1, s9, 3), 0);
   ck_assert_int_ne(strncmp(s1, s9, 3), 0);
-  ck_assert_int_eq(s21_strncmp(s1, s8, 2), 0);
-  ck_assert_int_eq(strncmp(s1, s8, 2), 0);
-  ck_assert_int_eq(s21_strncmp(s8, s1, 2), 0);
-  ck_assert_int_eq(strncmp(s8, s1, 2), 0);
-  ck_assert_int_eq(s21_strncmp(s1, s8, 8), 0);
-  ck_assert_int_eq(strncmp(s1, s8, 8), 0);
-  ck_assert_int_eq(s21_strncmp(s1, s2, 8), 0);
-  ck_assert_int_eq(strncmp(s1, s2, 8), 0);
-  ck_assert_int_ne(s21_strncmp(s3, s4, 1), 0);
-  ck_assert_int_ne(strncmp(s3, s4, 1), 0);
-  ck_assert_int_ne(s21_strncmp(s5, s6, 1), 0);
-  ck_assert_int_ne(strncmp(s5, s6, 1), 0);
-  ck_assert_int_ne(s21_strncmp(s6, s7, 1), 0);
-  ck_assert_int_ne(strncmp(s6, s7, 1), 0);
+  ck_assert_int_ne(s21_strncmp(s2, s9, 2), 0);
+  ck_assert_int_ne(strncmp(s2, s9, 2), 0);
+  ck_assert_int_ne(s21_strncmp(s3, s9, 2), 0);
+  ck_assert_int_ne(strncmp(s3, s9, 2), 0);
+  ck_assert_int_ne(s21_strncmp(s4, s9, 8), 0);
+  ck_assert_int_ne(strncmp(s4, s9, 8), 0);
+  ck_assert_int_ne(s21_strncmp(s5, s9, 8), 0);
+  ck_assert_int_ne(strncmp(s5, s9, 8), 0);
+  ck_assert_int_ne(s21_strncmp(s6, s9, 1), 0);
+  ck_assert_int_ne(strncmp(s6, s9, 1), 0);
+  ck_assert_int_ne(s21_strncmp(s7, s9, 1), 0);
+  ck_assert_int_ne(strncmp(s7, s9, 1), 0);
+  // ck_assert_int_ne(s21_strncmp(s8, s9, 1), 0);
+  // ck_assert_int_ne(strncmp(s6, s9, 1), 0);
 
   // ck_assert_int_ne(s21_strncmp(s1, s9, 2), strncmp(s1, s9, 2));
   // ck_assert_int_ne(s21_strncmp(s2, s9, 2), strncmp(s2, s9, 2));
