@@ -178,7 +178,8 @@ END_TEST
 
 START_TEST(s21_memcmp_test) {
   ck_assert_int_eq(s21_memcmp(s1, s2, 5), memcmp(s1, s1, 5));
-  ck_assert_int_eq(s21_memcmp(s2, s3, 5), memcmp(s2, s3, 5));
+  ck_assert_int_lt(s21_memcmp(s2, s3, 5), 0);
+  ck_assert_int_lt(memcmp(s2, s3, 5), 0);
   ck_assert_int_eq(s21_memcmp(s3, s4, 1), memcmp(s3, s4, 1));
   ck_assert_int_eq(s21_memcmp(s4, s5, 1), memcmp(s4, s5, 1));
   ck_assert_int_eq(s21_memcmp(s5, s6, 1), memcmp(s5, s6, 1));
