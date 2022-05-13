@@ -1,4 +1,5 @@
 #include "s21_string.h"
+
 #include "s21_string_test.h"
 
 START_TEST(s21_sprintf_test) {
@@ -35,14 +36,14 @@ START_TEST(s21_insert_test) {
   char src1[30] = "He Wollorld&llo\0";
   char trim_chars1[6] = "llo\0";
   char *src2 = s21_NULL;
-  void *out1;
+  void *out1, *out2, *out3;
 
   out1 = s21_insert(src1, trim_chars1, 2);
   ck_assert_str_eq(out1, "Hello Wollorld&llo\0");
-  out1 = s21_insert(src2, trim_chars1, 2);
-  ck_assert_ptr_eq(out1, s18);
-  out1 = s21_insert(src1, trim_chars1, 100);
-  ck_assert_ptr_eq(out1, s21_NULL);
+  out2 = s21_insert(src2, trim_chars1, 2);
+  ck_assert_ptr_eq(out2, s18);
+  out3 = s21_insert(src1, trim_chars1, 100);
+  ck_assert_ptr_eq(out3, s21_NULL);
 }
 END_TEST
 
@@ -173,8 +174,8 @@ END_TEST
 
 START_TEST(s21_memcmp_test) {
   ck_assert_int_eq(s21_memcmp(s1, s2, 5), memcmp(s1, s2, 5));
-  ck_assert_int_lt(s21_memcmp(s2, s3, 5), 0);
-  ck_assert_int_lt(memcmp(s2, s3, 5), 0);
+  ck_assert_int_ne(s21_memcmp(s2, s3, 5), 0);
+  ck_assert_int_ne(memcmp(s2, s3, 5), 0);
   ck_assert_int_eq(s21_memcmp(s3, s4, 1), memcmp(s3, s4, 1));
   ck_assert_int_eq(s21_memcmp(s4, s5, 1), memcmp(s4, s5, 1));
   ck_assert_int_eq(s21_memcmp(s5, s6, 1), memcmp(s5, s6, 1));
@@ -204,7 +205,8 @@ START_TEST(s21_strncat_test) {
 END_TEST
 
 START_TEST(s21_strcmp_test) {
-  ck_assert_int_eq(s21_strcmp(s1, s8), strcmp(s1, s8));
+  ck_assert_int_ne(s21_strcmp(s1, s8), 0);
+  ck_assert_int_ne(strcmp(s1, s8), 0);
   ck_assert_int_eq(s21_strcmp(s2, cs2), strcmp(s2, cs2));
   ck_assert_int_eq(s21_strcmp(s3, cs3), strcmp(s3, cs3));
   ck_assert_int_eq(s21_strcmp(s4, cs4), strcmp(s4, cs4));
@@ -215,7 +217,8 @@ START_TEST(s21_strcmp_test) {
 END_TEST
 
 START_TEST(s21_strncmp_test) {
-  ck_assert_int_eq(s21_strncmp(s1, s9, 3), strncmp(s1, s9, 3));
+  ck_assert_int_ne(s21_strncmp(s1, s9, 3), 0);
+  ck_assert_int_ne(strncmp(s1, s9, 3), 0);
   ck_assert_int_eq(s21_strncmp(s1, s8, 2), strncmp(s1, s8, 2));
   ck_assert_int_eq(s21_strncmp(s8, s1, 2), strncmp(s8, s1, 2));
   ck_assert_int_eq(s21_strncmp(s1, s8, 8), strncmp(s1, s8, 8));
@@ -249,7 +252,7 @@ END_TEST
 
 START_TEST(s21_strchr_test) {
   ck_assert_str_eq(s21_strchr(s1, 'o'), strchr(s1, 'o'));
-  ck_assert_str_eq(s21_strchr(s2, 'o'), strchr(s2, 'o'));
+  ck_assert_pstr_eq(s21_strchr(s2, 'o'), strchr(s2, 'o'));
   ck_assert_str_eq(s21_strchr(s3, 'a'), strchr(s3, 'a'));
   ck_assert_pstr_eq(s21_strchr(s4, 'n'), strchr(s4, 'n'));
   ck_assert_str_eq(s21_strchr(s5, ' '), strchr(s5, ' '));
