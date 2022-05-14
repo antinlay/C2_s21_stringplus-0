@@ -12,6 +12,16 @@ RUN apk --no-cache --upgrade add \
     cppcheck \
 	alpine-sdk \
 	pcre-dev \
+    libc-dev \
+    linux-headers \
+    libtool \
+    libcap-dev \
+    libseccomp-dev \
+    make \
+    automake \
+    autoconf \
+    argp-standalone \
+    musl-dev \
     check-dev
     
 RUN mkdir /test 
