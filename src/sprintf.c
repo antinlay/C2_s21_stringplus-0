@@ -21,7 +21,7 @@ struct s_sprintf {
 } p;
 
 // void s21_zero(char str[40], char format[40], char buf[40], int j, int i);
-int s21_swrite(char str[40], char buf[40], int j);
+s21_size_t s21_swrite(char str[1000], char buf[1000], int i);
 int s21_atoi(const char *buf, int i);
 // int s21_valist(char buf[40]);
 // void p_flag(char input_char);
@@ -36,7 +36,7 @@ int main(void) {
   int num0 = 19;
   int num1 = -149;
   s21_size_t unum0 = 22;
-  double fnum0 = -15.1911143763983639879378663978432;
+  double fnum0 = -0.0016516;
   double fnum1 = 0.000006125361;
   char test = 'W';
   char s[30] = "WAGA669*))";
@@ -45,13 +45,13 @@ int main(void) {
       // "%s__\t SIZE_T: %u__ "
       // "%%__[] "
       // "%d__"
-      "FLOAT: %10.f RAS DVA";
+      "FLOAT: %10.3f RAS DVA %f QQ";
   // \tEXP_e: %g__\tEXP_E: %E__\tg_exp: "
   // "%g__\tG_EXP: %G__";
-  s21_sprintff(str0, format, fnum0);
+  s21_sprintff(str0, format, fnum0, fnum1);
   // , num1, s, unum0, num0, fnum0, fnum1,
   //  fnum1, fnum0, fnum0);
-  sprintf(str1, format, fnum0);
+  sprintf(str1, format, fnum0, fnum1);
   //  num0, num1, s, unum0, num0, fnum0, fnum1, fnum1,
   //         fnum0, fnum0);
   printf("\nSTR0: %s\nSTR1: %s\n", str0, str1);
@@ -116,7 +116,7 @@ void s21_struct_init() {
   p.digit = -1;
 }
 
-int s21_swrite(char str[1000], char buf[1000], int i) {
+s21_size_t s21_swrite(char str[1000], char buf[1000], int i) {
   int k = 0;
   do {
     str[i] = buf[k];
@@ -135,24 +135,16 @@ void s21_count_align(int num, int count) {
         p.align = 0;
       }
     }
-    if (p.wdt < 0) {
+    if (p.wdt <= 0) {
       p.prc = 6;
       p.align = 0;
     } else
-      p.align = p.wdt - p.dec - p.prc - 2;
-  }
-  // else if (p.pnt != -1 && p.prc == 0) {
-  // }
-  else {
-    // if (num < 1 && num >= 0) p.align = p.wdt - p.dec - p.prc - 1;
-    // if (num >= 1) p.align = p.wdt - p.dec - p.prc - 2;
-    // if (num > -1 && num < 0) p.align = p.wdt - p.dec - p.prc - 3;
-    // if (num < -1)
-    //   p.align = p.wdt - p.dec - p.prc - 2;
-    // else
-    p.align = p.wdt - p.dec - p.prc;
+      p.align = p.wdt;
+  } else {
+    // if (num < 0 || p.pol > 0) {
+    p.align = p.wdt;
     if (p.prc <= 0) {
-      p.prc = p.dec;
+      p.prc = 0;
       if (p.align <= 0) {
         p.align = 0;
       }
@@ -180,13 +172,15 @@ int s21_int_count(int num) {
   return dec;
 }
 
-int s21_symb_align(char *buf_p) {
-  int i = 0;
-  if (p.align > 0) {
+int s21_symb_align(char *buf_p, int num, int i) {
+  char a_buf[1000] = "";
+  if (p.align > i) {
     s21_size_t symb = ' ';
     if (p.zero > 0) symb = '0';
-    s21_memset(buf_p, symb, p.align);
+    s21_memset(a_buf, symb, p.align - i);
     i += p.align;
+    s21_strcat(a_buf, buf_p);
+    s21_strcpy(buf_p, a_buf);
   }
   return i;
 }
@@ -197,48 +191,80 @@ char *s21_sel_cvt(int num, int prc, int *dec, int *sign) {
   }
 }
 
+int s21_add_sign(char *buf_p, int i, int sign) {
+  if (sign == 1) buf_p[i++] = '-';
+  if (sign == 0 && p.sign == '+') buf_p[i++] = '+';
+  return i;
+}
+
+int s21_pnt_num(char *buf_p, int i, int num) {
+  if (num == 0) {
+    if (p.prc <= 0) {
+      buf_p[i++] = '0';
+    } else {
+      buf_p[i++] = '0';
+      buf_p[i++] = '.';
+    }
+  }
+  return i;
+}
+
+int s21_wrt_int(char *buf_p, char *p_buf, int i, int j) {
+  s21_size_t k = 0;
+  do {
+    buf_p[i++] = p_buf[j++];
+    k++;
+  } while (--p.dec);
+  return k;
+}
+
+int s21_wrt_zero(char *buf_p, int i, int dec) {
+  do {
+    buf_p[i++] = '0';
+  } while (++dec);
+  return i;
+}
+
+int s21_wrt_num(char *buf_p, char *p_buf, int i, int j) {
+  do {
+    i += 1;
+    buf_p[i] = p_buf[j];
+  } while (p_buf[j++] != '\0');
+  return i;
+}
+
 void s21_ftoa(char buf_p[1000], long double num) {
   char *p_buf;
   int pow_num = 0, count = 0, i = 0, j = 0, dec = 0;
   count = s21_int_count(num);
-  p.dec = count;
   s21_count_align((int)num, count);
-  i = s21_symb_align(buf_p);
-  p_buf = fcvt(num, p.prc, &dec, &p.sign);
-  printf("\nDEC %d", dec);
+  p.dec = count;
+  if (p.prc == 0)
+    p_buf = ecvt(num, p.dec, &dec, &p.sign);
+  else
+    p_buf = fcvt(num, p.prc, &dec, &p.sign);
   if (dec <= 0) {
-    if (p.sign == 1) {
-      buf_p[i++] = '-';
-      buf_p[i++] = '0';
-      if (p.prc != 0) buf_p[i++] = '.';
-    } else {
-      buf_p[i++] = '0';
-      if (p.prc != 0) buf_p[i++] = '.';
-    }
+    i = s21_add_sign(buf_p, i, p.sign);
+    i = s21_pnt_num(buf_p, i, (int)num);
     if (dec < 0) {
-      do {
-        buf_p[i++] = '0';
-      } while (++dec);
+      i = s21_wrt_zero(buf_p, i, dec);
     }
     while (p_buf[dec] != '\0') {
       buf_p[i++] = p_buf[dec++];
     }
   } else {
-    if (p.sign == 1) {
-      buf_p[i++] = '-';
-    }
-    do {
-      buf_p[i++] = p_buf[j++];
-    } while (--dec);
+    printf("\n__I %d", i);
+    i = s21_add_sign(buf_p, i, p.sign);
+    s21_size_t k = s21_wrt_int(buf_p, p_buf, i, j);
+    i += k;
+    j += k;
     if (p.pnt > 0 && p.prc > 0) {
       buf_p[i] = '.';
-      do {
-        i += 1;
-        buf_p[i] = p_buf[j];
-      } while (p_buf[j++] != '\0');
+      i = s21_wrt_num(buf_p, p_buf, i, j);
     }
   }
-  buf_p[i] = '\0';
+  i = s21_symb_align(buf_p, (int)num, i);
+  // buf_p[i] = '\0';
 }
 
 void s21_etoa(char buf_p[1000], long double num) {
@@ -663,11 +689,19 @@ int s21_prc(char *buffer, int j) {
 // // str[j] = '\0';
 // }
 
+int s21_case_f(char *sbuffer, char *fbuf, int j, int i) {
+  double fspec = 0.0;
+  p.spec = 'f';
+  fspec = va_arg(p.args, double);
+  s21_ftoa(fbuf, fspec);
+  s21_struct_init();
+  return j;
+}
+
 int s21_sprintff(char *str, const char *format, ...) {
   char buffer[10000];
-  char sbuf[100];
+  char sbuffer[100];
   char dbuf[1000];
-  char fbuf[1000];
   char ebuf[100];
   char Ebuf[100];
   char *bufs;
@@ -687,7 +721,7 @@ int s21_sprintff(char *str, const char *format, ...) {
   buffer[len] = '\0';
   while (buffer[j] != '\0') {
     while (buffer[j] != '%') {
-      sbuf[i++] = buffer[j++];
+      sbuffer[i++] = buffer[j++];
       if (buffer[j] == '\0') break;
     }
     if (buffer[j] == '\0') break;
@@ -710,51 +744,52 @@ int s21_sprintff(char *str, const char *format, ...) {
     // }
     j = j_spec;
     // }
+    char fbuf[1000] = "";
     switch (buffer[j++]) {
       case 'c':
         p.spec = 'c';
         spec = va_arg(p.args, int);
-        sbuf[i++] = spec;
+        sbuffer[i++] = spec;
         j += 1;
         break;
       case 'd':
         p.spec = 'd';
         spec = va_arg(p.args, int);
         s21_itoa(spec, BASE, dbuf);
-        i += s21_swrite(sbuf, dbuf, i);
+        i += s21_swrite(sbuffer, dbuf, i);
         j += 1;
         break;
       case 'i':
         p.spec = 'i';
         spec = va_arg(p.args, int);
         s21_itoa(spec, BASE, dbuf);
-        i += s21_swrite(sbuf, dbuf, i);
+        i += s21_swrite(sbuffer, dbuf, i);
         j += 1;
         break;
       case 'u':
         p.spec = 'u';
         uspec = va_arg(p.args, s21_size_t);
         s21_itoa(uspec, BASE, dbuf);
-        i += s21_swrite(sbuf, dbuf, i);
+        i += s21_swrite(sbuffer, dbuf, i);
         j += 1;
         break;
       case 's':
         p.spec = 's';
         bufs = va_arg(p.args, char *);
-        len_s = s21_swrite(sbuf, bufs, i);
+        len_s = s21_swrite(sbuffer, bufs, i);
         i += len_s;
         j += 1;
         break;
       case '%':
         p.spec = '%';
-        sbuf[i++] = p.spec;
+        sbuffer[i++] = p.spec;
         j += 1;
         break;
       case 'e':
         p.spec = 'e';
         espec = va_arg(p.args, double);
         s21_etoa(ebuf, espec);
-        len_e = s21_swrite(sbuf, ebuf, i);
+        len_e = s21_swrite(sbuffer, ebuf, i);
         i += len_e;
         j += 1;
         break;
@@ -762,24 +797,20 @@ int s21_sprintff(char *str, const char *format, ...) {
         p.spec = 'E';
         Espec = va_arg(p.args, double);
         s21_etoa(Ebuf, Espec);
-        len_e = s21_swrite(sbuf, Ebuf, i);
+        len_e = s21_swrite(sbuffer, Ebuf, i);
         i += len_e;
         j += 1;
         break;
       case 'f':
-        p.spec = 'f';
-        fspec = va_arg(p.args, double);
-        s21_ftoa(fbuf, fspec);
-        len_f = s21_swrite(sbuf, fbuf, i);
+        j = s21_case_f(sbuffer, fbuf, j, i);
+        len_f = s21_swrite(sbuffer, fbuf, i);
         i += len_f;
-        // j += 1;
-        s21_struct_init();
         break;
       case 'g':
         p.spec = 'g';
         espec = va_arg(p.args, double);
         s21_gtoa(ebuf, espec);
-        len_e = s21_swrite(sbuf, ebuf, i);
+        len_e = s21_swrite(sbuffer, ebuf, i);
         i += len_e;
         j += 1;
         break;
@@ -787,7 +818,7 @@ int s21_sprintff(char *str, const char *format, ...) {
         p.spec = 'G';
         Espec = va_arg(p.args, double);
         s21_gtoa(Ebuf, Espec);
-        len_e = s21_swrite(sbuf, Ebuf, i);
+        len_e = s21_swrite(sbuffer, Ebuf, i);
         i += len_e;
         j += 1;
         break;
@@ -795,13 +826,13 @@ int s21_sprintff(char *str, const char *format, ...) {
 
       //   break;
       default:
-        sbuf[i++] = buffer[j++];
+        sbuffer[i++] = buffer[j++];
         break;
     }
   }
-  sbuf[i] = '\0';
-  for (int m = 0; sbuf[m] != '\0'; m++) {
-    *str++ = sbuf[m];
+  sbuffer[i] = '\0';
+  for (int m = 0; sbuffer[m] != '\0'; m++) {
+    *str++ = sbuffer[m];
   }
   *str = '\0';
   va_end(p.args);
