@@ -39,21 +39,19 @@ int main(void) {
   int num1 = -149;
   s21_size_t unum0 = 22;
   double fnum0 = 0.0016516;
-  double fnum1 = 21412.000006125361;
+  double fnum1 = -.06125361;
   char test = 'W';
   char s[30] = "WAGA669*))";
-  char format[100] =
-      // "CHAR %c__\tD_INT: %d__\tI_INT: %i__\tSTR0: "
-      // "%s__\t SIZE_T: %u__ "
-      // "%%__[] "
-      // "%d__"
-      "FLOAT: %-9.3f RAS DVA %f QQ";
+  char format[500] =
+      // "CHAR %c__\tD_INT: %d__\tI_INT: %i__\tSTR0: %s__\t SIZE_T: %u__ %%__[]
+      // "
+      "%d__FLOAT: %9.4f RAS %d DVA %4.2f QQ";
   // \tEXP_e: %g__\tEXP_E: %E__\tg_exp: "
   // "%g__\tG_EXP: %G__";
-  s21_sprintff(str0, format, fnum0, fnum1);
+  s21_sprintff(str0, format, num0, fnum0, num1, fnum1);
   // , num1, s, unum0, num0, fnum0, fnum1,
   //  fnum1, fnum0, fnum0);
-  sprintf(str1, format, fnum0, fnum1);
+  sprintf(str1, format, num0, fnum0, num1, fnum1);
   //  num0, num1, s, unum0, num0, fnum0, fnum1, fnum1,
   //         fnum0, fnum0);
   printf("\nSTR0: %s\nSTR1: %s\n", str0, str1);
@@ -64,44 +62,6 @@ int main(void) {
   //     p.wdt, p.prc, p.zero, p.pnt, p.pol, p.dec, p.sign, p.perc, p.align);
   return 0;
 }
-
-// int s21_align(char str[1000], int j, int align) {
-//     if (p.align == ' ' && p.sign == '+') {
-//         align -= 1;
-//         while (align--) {
-//             str[j++] = 32;
-//             // printf("str %s\np.align %d\n", str, sp);
-//         }
-//     } else if (p.align == ' ' && p.sign == '-') {
-//         while (align--) {
-//             str[j++] = 32;
-//             // printf("str %s\np.align %d\n", str, sp);
-//         }
-//     }
-//     return j;
-// }
-
-// void s21_zero(char str[40], char format[40], char buf[40], int j, int i) {
-//     // IF '0'-----------------------------!!!!!!!
-//     int align = 0, len = 0, digit = 0;
-//     if (format[i] == '0' || (format[i] == '0' && p.sign != 0)) {
-//         i += 1;
-//         // int k = 0;
-//         s21_valist(buf);
-//         len = s21_strlen(buf);
-//         digit = s21_atoi(format, i);
-//         p.zero = digit - len;
-//         align = digit - len;
-//         printf("p.zero %d\nlen_d %d\ndigit %d\n", p.zero, len, digit);
-//         while (align--) {
-//             str[j++] = '0';
-//             // printf("str %s\np.align %d\n", str, sp);
-//         }
-//         s21_swrite(str, buf, j, len);
-//         j += digit;
-//         i += 1;
-//     }
-// }
 
 void s21_struct_init() {
   p.wdt = -1;
@@ -193,8 +153,11 @@ char *s21_sel_cvt(int num, int prc, int *dec, int *sign) {
 }
 
 void s21_add_sign(char *buf_p, int sign) {
-  if (sign == 1) s21_strcat(buf_p, "-");
-  if (sign == 0 && p.sign == '+') s21_strcat(buf_p, "+");
+  if (sign == 1) {
+    s21_strcat(buf_p, "-");
+    // p.sign = 1;
+  }
+  if (sign == 0 && p.pol == '+') s21_strcat(buf_p, "+");
 }
 
 void s21_pnt_num(char *buf_p, int num) {
@@ -211,8 +174,8 @@ void s21_pnt_num(char *buf_p, int num) {
 }
 
 void s21_wrt_int(char *buf_p, char *p_buf) {
-  s21_size_t j = abs(p.dec);
-  s21_strncat(buf_p, p_buf, j);
+  s21_size_t dec = abs(p.dec);
+  s21_strncat(buf_p, p_buf, dec);
 }
 
 void s21_wrt_zero(char *buf_p, int dec) {
@@ -223,13 +186,15 @@ void s21_wrt_zero(char *buf_p, int dec) {
 }
 
 void s21_wrt_num(char *buf_p, char *p_buf) {
+  s21_size_t i = s21_strlen(buf_p);
+  s21_size_t k = 1, m = 1;
+  if (p.sign == 0) m = 0;
   s21_strcat(buf_p, ".");
-  s21_strcat(buf_p, p_buf);
-  // do {
-  //   i += 1;
-  //   buf_p[i] = p_buf[j];
-  // } while (p_buf[j++] != '\0');
-  // return i;
+  // s21_strcat(buf_p, p_buf);
+  do {
+    // i += 1;
+    buf_p[i + k] = p_buf[i - m];
+  } while (p_buf[i++] != '\0');
 }
 
 void s21_ftoa(char buf_p[BSIZE], long double num) {
@@ -257,9 +222,9 @@ void s21_ftoa(char buf_p[BSIZE], long double num) {
     printf("\n__I %d", i);
     s21_add_sign(buf_p, p.sign);
     s21_wrt_int(buf_p, p_buf);
-    if (p.pnt > 0 && p.prc > 0) {
-      s21_wrt_num(buf_p, p_buf);
-    }
+    // if (p.pnt > 0 && p.prc > 0) {
+    s21_wrt_num(buf_p, p_buf);
+    // }
   }
   s21_symb_align(buf_p, (int)num);
 }
@@ -452,247 +417,12 @@ int s21_prc(char *buffer, int j) {
   return digit;
 }
 
-// // int s21_valist(char buf[40]) {
-// //     int symb = va_arg(p.args, int);
-// //     s21_itoa(symb, BASE, buf);
-// //     // printf("VALIST %s\n", buf);
-// //     return symb;
-// // }
-
-// void p_flag(char input_char) {
-//     if (input_char == '.') p.pnt = 0;
-//     if (input_char == 'd') p.spec += 'd';
-//     if (input_char == 'c') p.spec += 'c';
-//     if (input_char == 'i') p.spec += 'i';
-//     if (input_char == 'f') p.spec += 'f';
-//     if (input_char == 'u') p.spec += 'u';
-//     if (input_char == 's') p.spec += 's';
-//     if (input_char == '-') p.align = 0;
-//     if (input_char == '+') p.sign = 0;
-//     if (input_char == '%') p.perc = 0;
-// }
-
-// void parser(char *str, const char *format) {
-// // struct s_printf *p;
-// p.wdt = 0;
-// p.prc = 0;
-// p.zero = 0;
-// p.pnt = 0;
-// p.pol = 0;
-// p.dec = 0;
-// p.sign = 0;
-// p.perc = 0;
-// p.align = 0;
-// int i = 0, j = 0, symb = 0, digit = 0, align = 0, len_d = 0;
-// char buf[40];
-// // symb = va_arg(p.args, int);
-// // s21_itoa(symb, BASE, buf);
-// // len_d = strlen(buf);
-// while (format[i] != '\0') {
-//     if (format[i] == '%') {
-//         // if (*format++ == '%' || *format++ == 'c' || *++format == 'd'
-//         ||
-//         //     *++format == 'i' || *++format == 'f' || *++format == 's'
-//         ||
-//         //     *++format == 'u' || *++format == '-' || *++format == '.'
-//         ||
-//         //     *++format == ' ' || *++format == 'h' || *++format == 'l')
-//         { if (format[i + 1] == 'c') {
-//             symb = va_arg(p.args, int);
-//             str[j] = symb;
-//             i++;
-//             j++;
-//         }
-//         if (format[i + 1] == 'd') {
-//             p.spec = 'd';
-//             s21_valist(buf);
-//             len_d = s21_strlen(buf);
-//             j += s21_swrite(str, buf, j, len_d);
-//             i += 1;
-//             printf("HUY %s\nlen_d %d\n j = %d\n", buf, len_d, j);
-//         }
-//         if (format[i + 1] == '0' || (format[i + 1] == '0' && p.sign !=
-//         0)) {
-//             // i++;
-//             //  INTERGER TO ASCII AND GET ARGUMENT
-//             symb = s21_valist(buf);
-//             //  GET LENGHT ARGUMENT
-//             len_d = s21_strlen(buf);
-//             //  ASCII TO INTEGER
-//             digit = s21_atoi(buf, i);
-//             //
-//             align = digit - len_d;
-//             //  IF LENGHT BUF > DIGIT
-//             if (align <= 0) {
-//                 p.zero = 0;
-//                 align = len_d;
-//                 s21_swrite(str, buf, j, len_d);
-//             } else {
-//                 p.zero = 1;
-//                 s21_align(str, j, align);
-//                 s21_swrite(str, buf, j, len_d);
-//             }
-//             printf("p.zero %d\nlen_d %d\ndigit %d\n", p.zero, len_d,
-//             digit);
-//             // while (align--) {
-//             //     str[j++] = '0';
-//             printf("buf %s\nalign %d\n", buf, align);
-//             // }
-
-//             j += digit;
-//             i += 1;
-//         }
-//         // if (*++format = 'i') {
-//         //     *str++ = va_arg(p.args, float);
-//         // }
-//         // if (*++format = 'f') {
-//         //     *str++ = va_arg(p.args, float);
-//         // }
-//         // if (*++format = 's') {
-//         //     *str++ = va_arg(p.args, char *);
-//         // }
-//         // if (*++format = 'u') {
-//         //     *str++ = va_arg(p.args, float);
-//         // }
-//         // CHECK '-' and FLAG '+'
-//         if (format[i + 1] == '-' || format[i + 1] == '+') {
-//             i += 1;
-//             // IF '0'-----------------------------!!!!!!!
-//             if (format[i] == '0' || (format[i] == '0' && p.sign != 0)) {
-//                 // i += 1;
-//                 //  INTERGER TO ASCII AND GET ARGUMENT
-//                 symb = s21_valist(buf);
-//                 //  GET LENGHT BUF
-//                 len_d = s21_strlen(buf);
-//                 //  ASCII TO INTEGER GET INTEGER
-//                 digit = s21_atoi(format, ++i);
-//                 //  IF LENGHT BUF > DIGIT
-//                 if ((digit - len_d) <= 0) {
-//                     p.zero = 0;
-//                     // i += 1;
-//                 } else {
-//                     align = digit - len_d;
-//                     p.zero = 1;
-//                 }
-//                 printf("p.zero %d\nlen_d %d\ndigit %d\n", p.zero, len_d,
-//                        digit);
-//                 while (align--) {
-//                     str[j++] = '0';
-//                     // printf("str %s\np.align %d\n", str, sp);
-//                 }
-//                 s21_swrite(str, buf, j, len_d);
-//                 // j += digit;
-//                 // i += 1;
-//             }
-//             // IF '+'
-//             if (format[i] == '+') {
-//                 p.sign = '+';
-//                 i += 1;
-//                 while (format[i] == '+' || format[i] == '-') {
-//                     p_flag(format[i]);
-//                     i += 1;
-//                 }
-//                 digit = s21_atoi(format, i);
-//                 if (digit != 0 && digit > len_d) {
-//                     p.align = ' ';
-//                     i += 1;
-//                 } else {
-//                     p.align = 0;
-//                     p.zero = 0;
-//                 }
-//                 printf("digit after %d\n i = %d\n", digit, i);
-//                 //  + FIND SPEC 'd'
-//                 if (format[i] == 'd' && p.align == 0) {
-//                     p.spec = 'd';
-//                     symb = s21_valist(buf);
-//                     len_d = s21_strlen(buf);
-//                     if (symb > 0) {
-//                         str[j] = '+';
-//                         j++;
-//                     }
-//                     printf("BUF %s\n", buf);
-//                     j += s21_swrite(str, buf, j, len_d);
-//                     // j+=1;
-//                     // i+=1;
-//                     printf("STR %s\nj = %d\ni = %d\n", str, j, i);
-//                 }
-//                 //  + FIND SPEC 'd' WITH SPACE
-//                 if (format[i] == 'd' && p.align == ' ') {
-//                     p.spec = 'd';
-//                     symb = s21_valist(buf);
-//                     len_d = s21_strlen(buf);
-//                     align = digit - len_d;
-//                     printf("str0 %s\nalign0 %d\n", str, align);
-//                     j = s21_align(str, j, align);
-//                     printf("str1 %s\nalign1 %d\nj = %d\n", str, align,
-//                     j);
-//                     // }
-//                     if (symb > 0) {
-//                         str[j] = '+';
-//                         j++;
-//                     }
-//                     j += s21_swrite(str, buf, j, len_d);
-//                     // i+=1;
-//                 }
-//             }
-//             // IF '-'
-//             if (format[i] == '-') {
-//                 p.sign = '-';
-//                 i += 1;
-//                 // NOT INCLUDE ADDITINAL '-' or '+'
-//                 while (format[i] == '-' || format[i] == '+') {
-//                     // p_flag(format[i]);
-//                     i += 1;
-//                 }
-//                 // ATOI
-//                 // printf("ATOI i = %d\n BUF = %s\n", i, buf);
-//                 digit = s21_atoi(format, i);
-//                 // printf("LATOI i = %d\n LBUF = %s\n", i, buf);
-//                 if (digit > 0) {
-//                     p.align = ' ';
-//                     i += 1;
-//                 } else {
-//                     p.align = 0;
-//                     p.zero = 0;
-//                 }
-//                 // printf
-//                 //  - FIND SPEC 'd'
-//                 if (format[i] == 'd' && p.align == 0) {
-//                     p.spec = 'd';
-//                     printf("buf sp %s\nlen_d %d\n", buf, len_d);
-//                     s21_valist(buf);
-//                     j += s21_swrite(str, buf, j, len_d);
-//                     // i += 1;
-//                 }
-
-//                 //  - FIND SPEC 'd' WITH SPACE
-//                 if (format[i] == 'd' && p.align == ' ') {
-//                     p.spec = 'd';
-//                     s21_valist(buf);
-//                     len_d = s21_strlen(buf);
-//                     align = digit - len_d;
-//                     // printf("buf sp %s\nlen_d %d\n", buf, len_d);
-//                     j += s21_swrite(str, buf, j, len_d);
-//                     j = s21_align(str, j, align);
-//                 }
-//             }
-//         }
-//     } else {
-//         str[j] = format[i];
-//         j++;
-//     }
-//     i++;
-// }
-// // str[j] = '\0';
-// }
-
-int s21_case_f(char *sbuffer, char *fbuf, int j, int i) {
+void s21_case_f(char *sbuffer, char *fbuf) {
   double fspec = 0.0;
   p.spec = 'f';
   fspec = va_arg(p.args, double);
   s21_ftoa(fbuf, fspec);
   s21_struct_init();
-  return j;
 }
 
 int s21_sprintff(char *str, const char *format, ...) {
@@ -745,27 +475,31 @@ int s21_sprintff(char *str, const char *format, ...) {
         spec = va_arg(p.args, int);
         sbuffer[i++] = spec;
         j += 1;
+        s21_struct_init();
         break;
       case 'd':
         p.spec = 'd';
         spec = va_arg(p.args, int);
         s21_itoa(spec, BASE, dbuf);
-        i += s21_swrite(sbuffer, dbuf, i);
-        j += 1;
+        i += s21_strlen(dbuf);
+        s21_strcat(sbuffer, dbuf);
+        s21_struct_init();
         break;
       case 'i':
         p.spec = 'i';
         spec = va_arg(p.args, int);
         s21_itoa(spec, BASE, dbuf);
-        i += s21_swrite(sbuffer, dbuf, i);
-        j += 1;
+        i += s21_strlen(dbuf);
+        s21_strcat(sbuffer, dbuf);
+        s21_struct_init();
         break;
       case 'u':
         p.spec = 'u';
         uspec = va_arg(p.args, s21_size_t);
         s21_itoa(uspec, BASE, dbuf);
-        i += s21_swrite(sbuffer, dbuf, i);
-        j += 1;
+        i += s21_strlen(dbuf);
+        s21_strcat(sbuffer, dbuf);
+        s21_struct_init();
         break;
       case 's':
         p.spec = 's';
@@ -773,11 +507,13 @@ int s21_sprintff(char *str, const char *format, ...) {
         len_s = s21_swrite(sbuffer, bufs, i);
         i += len_s;
         j += 1;
+        s21_struct_init();
         break;
       case '%':
         p.spec = '%';
         sbuffer[i++] = p.spec;
         j += 1;
+        s21_struct_init();
         break;
       case 'e':
         p.spec = 'e';
@@ -786,6 +522,7 @@ int s21_sprintff(char *str, const char *format, ...) {
         len_e = s21_swrite(sbuffer, ebuf, i);
         i += len_e;
         j += 1;
+        s21_struct_init();
         break;
       case 'E':
         p.spec = 'E';
@@ -794,9 +531,10 @@ int s21_sprintff(char *str, const char *format, ...) {
         len_e = s21_swrite(sbuffer, Ebuf, i);
         i += len_e;
         j += 1;
+        s21_struct_init();
         break;
       case 'f':
-        j = s21_case_f(sbuffer, fbuf, j, i);
+        s21_case_f(sbuffer, fbuf);
         s21_strcat(sbuffer, fbuf);
         len_f = s21_strlen(sbuffer);
         i = len_f;
@@ -808,6 +546,7 @@ int s21_sprintff(char *str, const char *format, ...) {
         len_e = s21_swrite(sbuffer, ebuf, i);
         i += len_e;
         j += 1;
+        s21_struct_init();
         break;
       case 'G':
         p.spec = 'G';
@@ -816,6 +555,7 @@ int s21_sprintff(char *str, const char *format, ...) {
         len_e = s21_swrite(sbuffer, Ebuf, i);
         i += len_e;
         j += 1;
+        s21_struct_init();
         break;
       // case '-':
 
@@ -828,10 +568,6 @@ int s21_sprintff(char *str, const char *format, ...) {
   sbuffer[i] = '\0';
   // str = malloc(s21_strlen(sbuffer) + 100);
   s21_strcpy(str, sbuffer);
-  // for (int m = 0; sbuffer[m] != '\0'; m++) {
-  //   str[m] = sbuffer[m];
-  // }
-  // str[++m] = '\0';
   va_end(p.args);
   return 0;
 }
