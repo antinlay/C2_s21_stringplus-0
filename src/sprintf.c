@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +14,8 @@ struct s_sprintf {
   int hash;      //  index '#'
   int zero;      //  00123.1
   int pnt;       //  . tochka
-  int pol;       //  polyarnost'
+  int plus;      //  '+' polyarnost'
+  int min;       //  '-' polyarnost'
   int dec;       //  poluchennaya dlina int_p
   int sign;      //  (+ ili -) polozhitel'noe ili otricatel'noe
   int perc;      // % procent
@@ -43,7 +45,7 @@ int main(void) {
   char format[500] =
       // "CHAR %c__\tD_INT: %d__\tI_INT: %i__\tSTR0: %s__\t SIZE_T: %u__ %%__[]
       // "
-      "%+ 12.5d__FLOAT: %.4f RAS %-41.9d DVA %+ 3.8f QQ";
+      "%-+12.5d__FLOAT: %- 16.40lf RAS %-41.9d DVA %+ 3.8f QQ";
   // \tEXP_e: %g__\tEXP_E: %E__\tg_exp: "
   // "%g__\tG_EXP: %G__";
   s21_sprintff(str0, format, num0, fnum0, num1, fnum1);
@@ -61,19 +63,45 @@ int main(void) {
   return 0;
 }
 
+char *s21_check_fnum(long double fnum) {
+  int res = fpclassify(fnum);
+  switch (res) {
+    case FP_NAN:
+
+      break;
+    case FP_INFINITE:
+
+      break;
+    case FP_ZERO:
+
+      break;
+    case FP_SUBNORMAL:
+
+      break;
+    case FP_NORMAL:
+
+      break;
+    default:
+      break;
+  }
+  return s21_strerror(2);
+}
+
 void s21_struct_init() {
   p.wdt = -1;
   p.zero = -1;
   p.spec = -1;
   p.sign = -1;
   p.prc = -1;
-  p.pol = -1;
+  p.plus = -1;
+  p.min = -1;
   p.pnt = -1;
   p.perc = -1;
   p.dec = -1;
   p.hash = -1;
   p.align = -1;
   p.index = -1;
+  p.mod = -1;
 }
 
 s21_size_t s21_swrite(char str[BSIZE], char buf[BSIZE], int i) {
@@ -144,8 +172,6 @@ void s21_icoint_align(int count) {
   }
 }
 
-void s21_int_align(char *buf, int num) {}
-
 void s21_symb_align(char *buf_p, int num) {
   char alignBuf[BSIZE] = "";
   s21_size_t len_buf = s21_strlen(buf_p);
@@ -153,7 +179,7 @@ void s21_symb_align(char *buf_p, int num) {
     s21_size_t symb = ' ';
     if (p.zero > 0) symb = '0';
     s21_memset(alignBuf, symb, p.align - len_buf);
-    if (p.pol == '-') {
+    if (p.min > 0) {
       s21_strcat(buf_p, alignBuf);
     } else {
       s21_strcat(alignBuf, buf_p);
@@ -169,11 +195,9 @@ char *s21_sel_cvt(int num, int prc, int *dec, int *sign) {
 }
 
 void s21_add_sign(char *buf_p, int sign) {
-  if (sign == 1) {
-    s21_strcat(buf_p, "-");
-    // p.sign = 1;
-  }
-  if (sign == 0 && p.pol == '+') s21_strcat(buf_p, "+");
+  if (sign == 0 && p.plus == '+') s21_strcat(buf_p, "+");
+  if (sign == 1) s21_strcat(buf_p, "-");
+  if (sign == 0 && p.min == '-' && p.spec == 'f') s21_strcat(buf_p, " ");
 }
 
 void s21_pnt_num(char *buf_p, int num) {
@@ -186,11 +210,6 @@ void s21_pnt_num(char *buf_p, int num) {
   }
 }
 
-void s21_wrt_int(char *buf_p, char *p_buf) {
-  s21_size_t dec = abs(p.dec);
-  s21_strncat(buf_p, p_buf, dec);
-}
-
 void s21_wrt_zero(char *buf_p, int dec) {
   s21_size_t leb_buf = s21_strlen(buf_p);
   do {
@@ -199,13 +218,9 @@ void s21_wrt_zero(char *buf_p, int dec) {
 }
 
 void s21_wrt_num(char *buf_p, char *p_buf) {
-  s21_size_t i = s21_strlen(buf_p);
-  s21_size_t k = 1, m = 1;
-  if (p.sign == 0) m = 0;
-  s21_strcat(buf_p, ".");
-  do {
-    buf_p[i + k] = p_buf[i - m];
-  } while (p_buf[i++] != '\0');
+  s21_size_t dec = abs(p.dec);
+  char *insDot = s21_insert(p_buf, ".", dec);
+  s21_strcat(buf_p, insDot);
 }
 
 void s21_ftoa(char buf_p[BSIZE], long double num) {
@@ -227,7 +242,7 @@ void s21_ftoa(char buf_p[BSIZE], long double num) {
     s21_strcat(buf_p, p_buf);
   } else {
     s21_add_sign(buf_p, p.sign);
-    s21_wrt_int(buf_p, p_buf);
+    // s21_wrt_int(buf_p, p_buf);
     s21_wrt_num(buf_p, p_buf);
   }
   s21_symb_align(buf_p, (int)num);
@@ -380,15 +395,13 @@ int s21_flag(char *buffer, int j) {
       if (buffer[j] == flist[m]) {
         if (m == 0) p.pnt = j;
         if (m == 1) p.hash = j;
-        if (m == 2 || m == 3) {
-          p.pol = flist[m];
-          p.index = j;
-        }
+        if (m == 2) p.min = '-';
+        if (m == 3) p.plus = '+';
         if (m == 4) p.space = j;
         if (m == 5) p.mod = 'h';
         if (m == 6) p.mod = 'l';
         if (m == 7) p.zero = j;
-        if (m == 7) p.mod = 'L';
+        if (m == 8) p.mod = 'L';
       }
       m++;
     }
@@ -401,13 +414,12 @@ int s21_wdt(char *buffer, int j) {
   int digit = 0;
   while (buffer[j] != '%' && buffer[j] != '.' && buffer[j] != p.spec &&
          buffer[j] != p.mod) {
-    while (buffer[j] >= '0' && buffer[j] <= '9') {
+    if (buffer[j] >= '0' && buffer[j] <= '9') {
       digit += (buffer[j] & 0x0F);
       digit *= BASE;
-      j++;
     }
+    j++;
   }
-  // p.index = j;
   digit /= BASE;
   return digit;
 }
@@ -427,11 +439,6 @@ int s21_prc(char *buffer, int j) {
   // p.index = j;
   return digit;
 }
-
-// void s21_mod() {
-//   if (p.pol > 0) j = p.index + 1;
-//   if (p.space > 0) j = p.space + 1;
-// }
 
 void s21_case_d(char *dBuf) {
   char digitBuf[BSIZE] = "";
